@@ -26,3 +26,56 @@ const file=document.getElementById('chartfile'),preview=document.getElementById(
 function renderSaved(){let list=[];try{list=JSON.parse(localStorage.getItem('pipnexStrategies')||'[]')}catch{};const el=document.getElementById('savedStrategies');if(!list.length){el.className='empty';el.textContent='No strategies saved yet.';return}el.className='';el.innerHTML=list.map((s,i)=>`<div class="card section"><div class="row"><strong>${escapeHtml(s.name)}</strong><button class="btn small" data-del="${i}">Delete</button></div><p class="muted">${escapeHtml(s.desc)}</p></div>`).join('');el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{list.splice(+b.dataset.del,1);localStorage.setItem('pipnexStrategies',JSON.stringify(list));renderSaved()})}function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}document.getElementById('saveStrategy').onclick=()=>{const n=document.getElementById('stratname').value.trim(),d=document.getElementById('stratdesc').value.trim();if(!n||!d){alert('Enter a strategy name and description first.');return}let l=[];try{l=JSON.parse(localStorage.getItem('pipnexStrategies')||'[]')}catch{};l.unshift({name:n,desc:d});localStorage.setItem('pipnexStrategies',JSON.stringify(l));document.getElementById('stratname').value='';document.getElementById('stratdesc').value='';renderSaved();alert('Strategy saved on this device.')};renderSaved();
 const inputs=['balance','riskpct','stopdist','pipvalue'];inputs.forEach(id=>document.getElementById(id).addEventListener('input',calc));function calc(){const b=Math.max(0,+balance.value||0),p=Math.max(0,+riskpct.value||0),d=Math.max(0,+stopdist.value||0),v=Math.max(0,+pipvalue.value||0),r=b*p/100,l=d*v? r/(d*v):0;riskamount.textContent='$'+r.toFixed(2);lotsize.textContent=l.toFixed(4)}calc();
 </script></body></html>
+
+// PipNex Flow - live EURUSD feed
+const PIPNEX_API = "https://pipnix-flow-api.onrender.com";
+
+async function loadEURUSD() {
+  try {
+    const response = await fetch(
+      `${PIPNEX_API}/api/market/forex/EURUSD`
+    );
+
+    if (!response.ok) {
+      throw new Error("Market feed unavailable");
+    }
+
+    const result = await response.json();
+    const price = Number(result.data.p);
+
+    if (!Number.isFinite(price)) {
+      throw new Error("Invalid price received");
+    }
+
+    const rows = document.querySelectorAll(
+      "#dashboard .card table tbody tr"
+    );
+
+    const eurusdRow = Array.from(rows).find(
+      row => row.cells[0]?.textContent.trim() === "EURUSD"
+    );
+
+    if (eurusdRow) {
+      eurusdRow.cells[1].textContent = price.toFixed(5);
+      eurusdRow.cells[2].textContent = "—";
+      eurusdRow.cells[2].className = "muted";
+    }
+
+    const demoLabel = document.querySelector(
+      ".topactions .pill:last-child"
+    );
+
+    if (demoLabel) {
+      demoLabel.textContent = "EURUSD feed connected";
+      demoLabel.classList.add("green");
+    }
+
+    console.log("PipNex EURUSD price:", price);
+
+  } catch (error) {
+    console.error("EURUSD feed error:", error);
+  }
+}
+
+loadEURUSD();
+setInterval(loadEURUSD, 60000);
