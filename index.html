@@ -49,6 +49,7 @@ th{color:var(--muted);font-weight:normal}
 </style>
 </head>
 <body>
+
 <aside class="sidebar">
 <div class="brand">PipNex <span>Flow</span></div>
 <nav class="nav" id="sideNav">
@@ -87,15 +88,15 @@ th{color:var(--muted);font-weight:normal}
 </div>
 
 <div class="card">
-<div class="label">Saved strategies</div>
-<div class="metric" id="strategyCount">0</div>
-<div class="label">Saved on this device</div>
+<div class="label">BTCUSD · Bitcoin</div>
+<div class="metric" id="btcPrice">Loading...</div>
+<div class="label" id="btcTime">Checking Bitcoin feed</div>
 </div>
 
 <div class="card">
-<div class="label">Risk calculator</div>
-<div class="metric green">Ready</div>
-<div class="label">Educational estimate</div>
+<div class="label">Saved strategies</div>
+<div class="metric" id="strategyCount">0</div>
+<div class="label">Saved on this device</div>
 </div>
 </div>
 
@@ -112,7 +113,7 @@ th{color:var(--muted);font-weight:normal}
 <tr><th>Symbol</th><th>Price</th><th>Source</th></tr>
 <tr><td>EURUSD</td><td id="watchEURUSD">Loading...</td><td id="watchEURSource">Feed</td></tr>
 <tr><td>XAUUSD</td><td id="watchGold">Loading...</td><td id="watchGoldSource">Feed</td></tr>
-<tr><td>BTCUSD</td><td>—</td><td>Offline</td></tr>
+<tr><td>BTCUSD</td><td id="watchBTC">Loading...</td><td id="watchBTCSource">Feed</td></tr>
 <tr><td>US30</td><td>—</td><td>Offline</td></tr>
 </table>
 </div>
@@ -205,6 +206,7 @@ th{color:var(--muted);font-weight:normal}
 <table>
 <tr><td>EURUSD market feed</td><td id="settingsFeed">Checking</td></tr>
 <tr><td>XAUUSD market feed</td><td id="settingsGold">Checking</td></tr>
+<tr><td>BTCUSD market feed</td><td id="settingsBTC">Checking</td></tr>
 <tr><td>AI chart analysis</td><td>Not connected</td></tr>
 <tr><td>Firebase accounts</td><td>Not connected</td></tr>
 <tr><td>MT5 integration</td><td>Not connected</td></tr>
@@ -238,17 +240,17 @@ function showPage(id){
 }
 navs.forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 
-const feedState={eurusd:false,gold:false};
+const feedState={eurusd:false,gold:false,btc:false};
 
 function updateFeedStatus(){
   const status=document.getElementById("feedStatus");
-  const both=feedState.eurusd&&feedState.gold;
+  const count=Object.values(feedState).filter(Boolean).length;
 
-  if(both){
-    status.textContent="● EURUSD + Gold connected";
+  if(count===3){
+    status.textContent="● 3 market feeds connected";
     status.style.color="var(--green)";
-  }else if(feedState.eurusd||feedState.gold){
-    status.textContent="● One market feed connected";
+  }else if(count>0){
+    status.textContent="● "+count+" of 3 feeds connected";
     status.style.color="var(--blue)";
   }else{
     status.textContent="● Market feeds unavailable";
@@ -330,11 +332,53 @@ async function loadGold(){
   updateFeedStatus();
 }
 
+async function loadBTC(){
+  const settings=document.getElementById("settingsBTC");
+
+  try{
+    const response=await fetch(API+"/api/market/crypto/BTCUSD");
+    if(!response.ok)throw new Error("Bitcoin feed unavailable");
+
+    const result=await response.json();
+    const price=Number(result.data?.p);
+    if(!Number.isFinite(price))throw new Error("Invalid Bitcoin price");
+
+    const formatted=price.toLocaleString("en-US",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    });
+
+    document.getElementById("btcPrice").textContent=formatted;
+    document.getElementById("watchBTC").textContent=formatted;
+    document.getElementById("btcTime").textContent="Provider: SiftingIO";
+    document.getElementById("watchBTCSource").textContent="SiftingIO";
+
+    settings.textContent="Connected";
+    settings.className="green";
+    feedState.btc=true;
+
+  }catch(error){
+    document.getElementById("btcPrice").textContent="Unavailable";
+    document.getElementById("watchBTC").textContent="Unavailable";
+    document.getElementById("btcTime").textContent="Could not load Bitcoin";
+    document.getElementById("watchBTCSource").textContent="Unavailable";
+
+    settings.textContent="Unavailable";
+    settings.className="red";
+    feedState.btc=false;
+    console.error("BTCUSD feed error:",error);
+  }
+
+  updateFeedStatus();
+}
+
 loadEURUSD();
 loadGold();
+loadBTC();
 
 setInterval(loadEURUSD,60000);
 setInterval(loadGold,60000);
+setInterval(loadBTC,60000);
 
 const chartFile=document.getElementById("chartFile");
 chartFile.addEventListener("change",()=>{
