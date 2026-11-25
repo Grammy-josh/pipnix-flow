@@ -62,36 +62,84 @@ th{color:var(--muted);font-weight:normal}
 <button data-page="settings">⚙ Settings</button>
 </nav>
 </aside>
+
 <main class="main">
-<div class="top"><span>PipNex Flow / <strong id="crumb">Dashboard</strong></span><span class="status" id="feedStatus">Checking feed...</span></div>
+<div class="top">
+<span>PipNex Flow / <strong id="crumb">Dashboard</strong></span>
+<span class="status" id="feedStatus">Checking feeds...</span>
+</div>
 
 <section class="page active" id="dashboard">
-<h1>Market Dashboard</h1><p class="sub">Your trading workspace at a glance.</p>
+<h1>Market Dashboard</h1>
+<p class="sub">Your trading workspace at a glance.</p>
+
 <div class="grid">
-<div class="card"><div class="label">XAUUSD</div><div class="metric">—</div><div class="label">Not connected</div></div>
-<div class="card"><div class="label">EURUSD · Live feed</div><div class="metric" id="eurusdPrice">Loading...</div><div class="label" id="eurusdTime">Waiting for data</div></div>
-<div class="card"><div class="label">Saved strategies</div><div class="metric" id="strategyCount">0</div><div class="label">Saved on this device</div></div>
-<div class="card"><div class="label">Risk calculator</div><div class="metric green">Ready</div><div class="label">Educational estimate</div></div>
+<div class="card">
+<div class="label">XAUUSD · Gold</div>
+<div class="metric" id="goldPrice">Loading...</div>
+<div class="label" id="goldTime">Checking Gold feed</div>
 </div>
+
+<div class="card">
+<div class="label">EURUSD · Live feed</div>
+<div class="metric" id="eurusdPrice">Loading...</div>
+<div class="label" id="eurusdTime">Waiting for data</div>
+</div>
+
+<div class="card">
+<div class="label">Saved strategies</div>
+<div class="metric" id="strategyCount">0</div>
+<div class="label">Saved on this device</div>
+</div>
+
+<div class="card">
+<div class="label">Risk calculator</div>
+<div class="metric green">Ready</div>
+<div class="label">Educational estimate</div>
+</div>
+</div>
+
 <div class="two section">
-<div class="card"><h2>Market overview</h2><p class="muted">Live chart connection not yet available.</p><div class="notice">No illustrative chart is presented as live market data.</div></div>
-<div class="card"><h2>Watchlist</h2><table><tr><th>Symbol</th><th>Price</th><th>Source</th></tr>
-<tr><td>EURUSD</td><td id="watchEURUSD">Loading...</td><td>Feed</td></tr>
-<tr><td>XAUUSD</td><td>—</td><td>Offline</td></tr>
-<tr><td>BTCUSD</td><td>—</td><td>Offline</td></tr>
-<tr><td>US30</td><td>—</td><td>Offline</td></tr></table></div>
+<div class="card">
+<h2>Market overview</h2>
+<p class="muted">Live chart connection not yet available.</p>
+<div class="notice">No illustrative chart is presented as live market data.</div>
 </div>
-<div class="card section"><h2>Activity</h2><div class="empty">Your saved strategies will appear here.</div></div>
+
+<div class="card">
+<h2>Watchlist</h2>
+<table>
+<tr><th>Symbol</th><th>Price</th><th>Source</th></tr>
+<tr><td>EURUSD</td><td id="watchEURUSD">Loading...</td><td id="watchEURSource">Feed</td></tr>
+<tr><td>XAUUSD</td><td id="watchGold">Loading...</td><td id="watchGoldSource">Feed</td></tr>
+<tr><td>BTCUSD</td><td>—</td><td>Offline</td></tr>
+<tr><td>US30</td><td>—</td><td>Offline</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card section">
+<h2>Activity</h2>
+<div class="empty">Your saved strategies will appear here.</div>
+</div>
 </section>
 
 <section class="page" id="chartai">
-<h1>Chart AI</h1><p class="sub">Upload a chart screenshot for preview.</p>
-<div class="card"><div class="upload"><h2>Choose chart screenshot</h2><input type="file" id="chartFile" accept="image/*"><br><img id="chartPreview" class="preview" hidden></div>
-<div class="notice">AI image analysis is not connected yet. Uploading an image does not generate a trade signal.</div></div>
+<h1>Chart AI</h1>
+<p class="sub">Upload a chart screenshot for preview.</p>
+<div class="card">
+<div class="upload">
+<h2>Choose chart screenshot</h2>
+<input type="file" id="chartFile" accept="image/*"><br>
+<img id="chartPreview" class="preview" hidden>
+</div>
+<div class="notice">AI image analysis is not connected yet. Uploading an image does not generate a trade signal.</div>
+</div>
 </section>
 
 <section class="page" id="strategy">
-<h1>Strategy Builder</h1><p class="sub">Create and save your trading rules.</p>
+<h1>Strategy Builder</h1>
+<p class="sub">Create and save your trading rules.</p>
 <div class="card">
 <div class="field"><label>Strategy name</label><input id="strategyName" placeholder="My strategy"></div>
 <div class="field"><label>Strategy rules</label><textarea id="strategyDescription" placeholder="Entry, exit, timeframe and risk rules..."></textarea></div>
@@ -101,8 +149,10 @@ th{color:var(--muted);font-weight:normal}
 </section>
 
 <section class="page" id="risk">
-<h1>Risk Calculator</h1><p class="sub">Simplified position-size estimate.</p>
-<div class="card"><div class="formgrid">
+<h1>Risk Calculator</h1>
+<p class="sub">Simplified position-size estimate.</p>
+<div class="card">
+<div class="formgrid">
 <div class="field"><label>Account balance ($)</label><input type="number" id="balance" value="20" min="0"></div>
 <div class="field"><label>Risk (%)</label><input type="number" id="riskPercent" value="1" min="0" max="100"></div>
 <div class="field"><label>Stop distance</label><input type="number" id="stopDistance" value="100" min="0"></div>
@@ -117,30 +167,50 @@ th{color:var(--muted);font-weight:normal}
 </section>
 
 <section class="page" id="backtest">
-<h1>Backtesting</h1><p class="sub">Strategy performance evaluation.</p>
-<div class="card"><span class="badge">Not connected</span><h2 class="section">Backtesting engine</h2><p class="muted">Historical candles, spread, fees, slippage and a tested strategy engine are required before valid results can be calculated.</p><p class="muted">No invented win rates or performance results are displayed.</p></div>
+<h1>Backtesting</h1>
+<p class="sub">Strategy performance evaluation.</p>
+<div class="card">
+<span class="badge">Not connected</span>
+<h2 class="section">Backtesting engine</h2>
+<p class="muted">Historical candles, spread, fees, slippage and a tested strategy engine are required before valid results can be calculated.</p>
+<p class="muted">No invented win rates or performance results are displayed.</p>
+</div>
 </section>
 
 <section class="page" id="bots">
-<h1>Bots & MT5</h1><p class="sub">Automation workspace.</p>
-<div class="card"><span class="badge">Not connected</span><h2 class="section">MetaTrader integration</h2><p class="muted">No broker account is connected. This app does not execute trades or hold funds.</p><button class="btn" disabled>MT5 connection · Coming later</button></div>
+<h1>Bots & MT5</h1>
+<p class="sub">Automation workspace.</p>
+<div class="card">
+<span class="badge">Not connected</span>
+<h2 class="section">MetaTrader integration</h2>
+<p class="muted">No broker account is connected. This app does not execute trades or hold funds.</p>
+<button class="btn" disabled>MT5 connection · Coming later</button>
+</div>
 <div class="card section"><h2>Bot status</h2><div class="empty">No bots running.</div></div>
 </section>
 
 <section class="page" id="news">
-<h1>Economic News</h1><p class="sub">Economic events and market calendar.</p>
-<div class="card"><span class="badge">Calendar not connected</span><p class="muted section">A verified calendar provider has not been connected. No events are displayed.</p></div>
+<h1>Economic News</h1>
+<p class="sub">Economic events and market calendar.</p>
+<div class="card">
+<span class="badge">Calendar not connected</span>
+<p class="muted section">A verified calendar provider has not been connected. No events are displayed.</p>
+</div>
 </section>
 
 <section class="page" id="settings">
-<h1>Settings</h1><p class="sub">Service connection status.</p>
-<div class="card"><table>
+<h1>Settings</h1>
+<p class="sub">Service connection status.</p>
+<div class="card">
+<table>
 <tr><td>EURUSD market feed</td><td id="settingsFeed">Checking</td></tr>
+<tr><td>XAUUSD market feed</td><td id="settingsGold">Checking</td></tr>
 <tr><td>AI chart analysis</td><td>Not connected</td></tr>
 <tr><td>Firebase accounts</td><td>Not connected</td></tr>
 <tr><td>MT5 integration</td><td>Not connected</td></tr>
 <tr><td>Push notifications</td><td>Not connected</td></tr>
-</table></div>
+</table>
+</div>
 <div class="notice">PipNex Flow is an analysis prototype. Market data can differ from broker execution prices. Trading involves risk. Test on demo first.</div>
 </section>
 </main>
@@ -168,34 +238,103 @@ function showPage(id){
 }
 navs.forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 
-async function loadEURUSD(){
+const feedState={eurusd:false,gold:false};
+
+function updateFeedStatus(){
   const status=document.getElementById("feedStatus");
+  const both=feedState.eurusd&&feedState.gold;
+
+  if(both){
+    status.textContent="● EURUSD + Gold connected";
+    status.style.color="var(--green)";
+  }else if(feedState.eurusd||feedState.gold){
+    status.textContent="● One market feed connected";
+    status.style.color="var(--blue)";
+  }else{
+    status.textContent="● Market feeds unavailable";
+    status.style.color="var(--red)";
+  }
+}
+
+async function loadEURUSD(){
   const settings=document.getElementById("settingsFeed");
+
   try{
     const response=await fetch(API+"/api/market/forex/EURUSD");
     if(!response.ok)throw new Error("Feed unavailable");
+
     const result=await response.json();
     const price=Number(result.data?.p);
     if(!Number.isFinite(price))throw new Error("Invalid price");
 
-    document.getElementById("eurusdPrice").textContent=price.toFixed(5);
-    document.getElementById("watchEURUSD").textContent=price.toFixed(5);
+    const formatted=price.toFixed(5);
+
+    document.getElementById("eurusdPrice").textContent=formatted;
+    document.getElementById("watchEURUSD").textContent=formatted;
     document.getElementById("eurusdTime").textContent="Provider: SiftingIO";
-    status.textContent="● EURUSD feed connected";
+    document.getElementById("watchEURSource").textContent="SiftingIO";
+
     settings.textContent="Connected";
     settings.className="green";
+    feedState.eurusd=true;
+
   }catch(error){
     document.getElementById("eurusdPrice").textContent="Unavailable";
     document.getElementById("watchEURUSD").textContent="Unavailable";
     document.getElementById("eurusdTime").textContent="Could not load feed";
-    status.textContent="● Feed unavailable";
+    document.getElementById("watchEURSource").textContent="Unavailable";
+
     settings.textContent="Unavailable";
     settings.className="red";
-    console.error("PipNex feed error:",error);
+    feedState.eurusd=false;
+    console.error("EURUSD feed error:",error);
   }
+
+  updateFeedStatus();
 }
+
+async function loadGold(){
+  const settings=document.getElementById("settingsGold");
+
+  try{
+    const response=await fetch(API+"/api/market/commodities/XAUUSD");
+    if(!response.ok)throw new Error("Gold feed unavailable");
+
+    const result=await response.json();
+    const price=Number(result.data?.p);
+    if(!Number.isFinite(price))throw new Error("Invalid Gold price");
+
+    const formatted=price.toFixed(2);
+
+    document.getElementById("goldPrice").textContent=formatted;
+    document.getElementById("watchGold").textContent=formatted;
+    document.getElementById("goldTime").textContent="Provider: SiftingIO";
+    document.getElementById("watchGoldSource").textContent="SiftingIO";
+
+    settings.textContent="Connected";
+    settings.className="green";
+    feedState.gold=true;
+
+  }catch(error){
+    document.getElementById("goldPrice").textContent="Unavailable";
+    document.getElementById("watchGold").textContent="Unavailable";
+    document.getElementById("goldTime").textContent="Could not load Gold";
+    document.getElementById("watchGoldSource").textContent="Unavailable";
+
+    settings.textContent="Unavailable";
+    settings.className="red";
+    feedState.gold=false;
+    console.error("Gold feed error:",error);
+  }
+
+  updateFeedStatus();
+}
+
 loadEURUSD();
+loadGold();
+
 setInterval(loadEURUSD,60000);
+setInterval(loadGold,60000);
 
 const chartFile=document.getElementById("chartFile");
 chartFile.addEventListener("change",()=>{
@@ -209,15 +348,23 @@ chartFile.addEventListener("change",()=>{
 function escapeHTML(value){
   return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+
 function getStrategies(){
   try{return JSON.parse(localStorage.getItem("pipnexStrategies")||"[]");}
   catch{return [];}
 }
+
 function renderStrategies(){
   const list=getStrategies();
   document.getElementById("strategyCount").textContent=list.length;
   const box=document.getElementById("savedStrategies");
-  if(!list.length){box.className="empty";box.textContent="No saved strategies yet.";return;}
+
+  if(!list.length){
+    box.className="empty";
+    box.textContent="No saved strategies yet.";
+    return;
+  }
+
   box.className="";
   box.innerHTML=list.map((s,i)=>`
     <div class="card section">
@@ -225,6 +372,7 @@ function renderStrategies(){
       <p class="muted">${escapeHTML(s.description)}</p>
       <button class="btn" data-delete="${i}">Delete</button>
     </div>`).join("");
+
   box.querySelectorAll("[data-delete]").forEach(button=>{
     button.addEventListener("click",()=>{
       const items=getStrategies();
@@ -234,18 +382,26 @@ function renderStrategies(){
     });
   });
 }
+
 document.getElementById("saveStrategy").addEventListener("click",()=>{
   const name=document.getElementById("strategyName").value.trim();
   const description=document.getElementById("strategyDescription").value.trim();
-  if(!name||!description){alert("Enter a strategy name and rules first.");return;}
+
+  if(!name||!description){
+    alert("Enter a strategy name and rules first.");
+    return;
+  }
+
   const list=getStrategies();
   list.unshift({name,description});
   localStorage.setItem("pipnexStrategies",JSON.stringify(list));
+
   document.getElementById("strategyName").value="";
   document.getElementById("strategyDescription").value="";
   renderStrategies();
   alert("Strategy saved on this device.");
 });
+
 renderStrategies();
 
 function calculateRisk(){
@@ -253,16 +409,20 @@ function calculateRisk(){
   const percent=Math.max(0,Number(document.getElementById("riskPercent").value)||0);
   const distance=Math.max(0,Number(document.getElementById("stopDistance").value)||0);
   const value=Math.max(0,Number(document.getElementById("pipValue").value)||0);
+
   const risk=balance*percent/100;
   const lots=distance*value>0?risk/(distance*value):0;
+
   document.getElementById("riskAmount").textContent="$"+risk.toFixed(2);
   document.getElementById("lotSize").textContent=lots.toFixed(4);
 }
+
 ["balance","riskPercent","stopDistance","pipValue"].forEach(id=>{
   document.getElementById(id).addEventListener("input",calculateRisk);
 });
+
 calculateRisk();
 </script>
 </body>
-                     </html>
-                     
+  </html>
+  
