@@ -11,12 +11,14 @@
 :root{
 --bg:#080d17;
 --panel:#111a29;
+--panel2:#0b1421;
 --line:#26364c;
 --text:#edf3fc;
 --muted:#91a0b7;
 --green:#18ce98;
 --red:#ff667b;
 --blue:#70a4ff;
+--gold:#f2c879;
 }
 *{box-sizing:border-box}
 body{
@@ -25,7 +27,7 @@ background:var(--bg);
 color:var(--text);
 font:14px Arial,sans-serif;
 }
-button,input,textarea{font:inherit}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 .sidebar{
 position:fixed;
@@ -113,6 +115,7 @@ font-size:12px;
 }
 th{color:var(--muted);font-weight:normal}
 .badge{
+display:inline-block;
 font-size:10px;
 padding:5px 8px;
 border-radius:20px;
@@ -138,7 +141,7 @@ color:var(--muted);
 font-size:12px;
 margin-bottom:6px;
 }
-.field input,.field textarea{
+.field input,.field textarea,.field select{
 width:100%;
 padding:11px;
 border:1px solid var(--line);
@@ -146,7 +149,8 @@ border-radius:8px;
 background:#0b1421;
 color:white;
 }
-.field textarea{min-height:100px}
+.field select option{background:#0b1421}
+.field textarea{min-height:100px;resize:vertical}
 .formgrid{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -160,6 +164,7 @@ padding:12px;
 border-radius:9px;
 font-size:12px;
 margin-top:15px;
+line-height:1.6;
 }
 .empty{
 text-align:center;
@@ -179,22 +184,100 @@ margin-top:12px;
 border-radius:8px;
 }
 .bottom{display:none}
+
+/* CHART AI RESULTS */
 #aiResult{
 display:none;
-margin-top:17px;
-padding:16px;
-background:#0b1421;
+margin-top:18px;
+}
+.ai-results-heading{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:13px;
+}
+.ai-results-heading strong{
+font-size:16px;
+}
+.ai-results-heading span{
+font-size:11px;
+color:var(--muted);
+}
+.ai-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px;
+}
+.ai-section{
+background:var(--panel2);
 border:1px solid var(--line);
-border-radius:10px;
+border-radius:11px;
+padding:15px;
+min-width:0;
+}
+.ai-section.full{
+grid-column:1/-1;
+}
+.ai-section h3{
+font-size:13px;
+margin:0 0 11px;
+color:var(--blue);
+}
+.ai-section-body{
+font-size:13px;
+line-height:1.75;
+color:var(--text);
 white-space:pre-wrap;
-line-height:1.7;
 overflow-wrap:anywhere;
+margin:0;
+}
+.ai-setup{
+border-color:#52617a;
+}
+.ai-setup h3{color:var(--gold)}
+.ai-status-pill{
+display:inline-block;
+font-size:10px;
+font-weight:bold;
+padding:6px 9px;
+border-radius:20px;
+margin-bottom:11px;
+background:#26364c;
+color:var(--text);
+}
+.ai-status-pill.no-setup{
+background:#332b1d;
+color:var(--gold);
+}
+.ai-status-pill.buy{
+background:#123b31;
+color:var(--green);
+}
+.ai-status-pill.sell{
+background:#3b2029;
+color:var(--red);
 }
 #aiStatus{
 margin-top:12px;
 color:var(--muted);
+line-height:1.5;
 }
 #analyzeBtn{margin-top:15px}
+.strategy-meta{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin:8px 0;
+}
+.strategy-meta span{
+font-size:10px;
+padding:5px 8px;
+border-radius:20px;
+background:#1b2b40;
+color:var(--blue);
+}
 @media(max-width:850px){
 .sidebar{width:185px}
 .main{margin-left:185px}
@@ -209,6 +292,8 @@ color:var(--muted);
 .metric{font-size:20px}
 .top .status{display:none}
 .formgrid{grid-template-columns:1fr}
+.ai-grid{grid-template-columns:1fr}
+.ai-section.full{grid-column:auto}
 .bottom{
 display:flex;
 position:fixed;
@@ -328,7 +413,6 @@ accept="image/jpeg,image/png,image/webp"
 >
 
 <br>
-
 <img id="chartPreview" class="preview" hidden>
 </div>
 
@@ -351,17 +435,40 @@ Verify observations independently before making decisions.
 <!-- STRATEGY -->
 <section class="page" id="strategy">
 <h1>Strategy Builder</h1>
-<p class="sub">Create and save your trading rules.</p>
+<p class="sub">Create and save trading rules for a chosen market and timeframe.</p>
 
 <div class="card">
+
+<div class="formgrid">
 <div class="field">
 <label>Strategy name</label>
-<input id="strategyName" placeholder="My strategy">
+<input id="strategyName" placeholder="My Gold strategy">
+</div>
+
+<div class="field">
+<label>Market symbol</label>
+<select id="strategySymbol">
+<option value="XAUUSD" selected>XAUUSD · Gold</option>
+<option value="EURUSD">EURUSD</option>
+<option value="BTCUSD">BTCUSD</option>
+</select>
+</div>
+
+<div class="field">
+<label>Main timeframe</label>
+<select id="strategyTimeframe">
+<option value="M5">M5 · 5 minutes</option>
+<option value="M15" selected>M15 · 15 minutes</option>
+<option value="M30">M30 · 30 minutes</option>
+<option value="H1">H1 · 1 hour</option>
+<option value="H4">H4 · 4 hours</option>
+</select>
+</div>
 </div>
 
 <div class="field">
 <label>Strategy rules</label>
-<textarea id="strategyDescription" placeholder="Entry, exit, timeframe and risk rules..."></textarea>
+<textarea id="strategyDescription" placeholder="Entry conditions, indicators, stop-loss, take-profit and exit rules..."></textarea>
 </div>
 
 <button class="btn" id="saveStrategy">Save strategy</button>
@@ -370,6 +477,12 @@ Verify observations independently before making decisions.
 <div class="card section">
 <h2>Saved strategies</h2>
 <div id="savedStrategies" class="empty">No saved strategies yet.</div>
+</div>
+
+<div class="notice">
+A single-timeframe strategy uses its selected timeframe for all its chart conditions.
+M15 is selected by default for your XAUUSD strategy.
+Saved strategies are stored locally on this device.
 </div>
 </section>
 
@@ -729,7 +842,7 @@ chartFile.addEventListener("change", () => {
   selectedChart = null;
   analyzeBtn.disabled = true;
   aiResult.style.display = "none";
-  aiResult.textContent = "";
+  aiResult.replaceChildren();
 
   if (previewUrl) {
     URL.revokeObjectURL(previewUrl);
@@ -771,9 +884,131 @@ chartFile.addEventListener("change", () => {
   chartPreview.hidden = false;
 
   analyzeBtn.disabled = false;
+  aiStatus.style.color = "var(--muted)";
   aiStatus.textContent =
     "Image ready. Tap Analyze chart to begin.";
 });
+
+/*
+  Formats the AI's existing text response into separate cards.
+  It does not invent levels, entries, or trading signals.
+*/
+function renderAIAnalysis(analysis, disclaimer) {
+  const source = String(analysis || "").trim();
+
+  if (!source) {
+    throw new Error("AI returned an empty analysis.");
+  }
+
+  const lines = source.split(/\r?\n/);
+  const sections = [];
+  let current = null;
+
+  lines.forEach(line => {
+    const heading = line.match(/^#{1,6}\s+(.+?)\s*$/);
+
+    if (heading) {
+      current = {
+        title: heading[1].replace(/\*\*/g, "").trim(),
+        body: []
+      };
+      sections.push(current);
+    } else if (current) {
+      current.body.push(line);
+    }
+  });
+
+  if (!sections.length) {
+    sections.push({
+      title: "Full AI Analysis",
+      body: lines
+    });
+  }
+
+  aiResult.replaceChildren();
+
+  const heading = document.createElement("div");
+  heading.className = "ai-results-heading";
+
+  const headingTitle = document.createElement("strong");
+  headingTitle.textContent = "Chart Analysis";
+
+  const headingInfo = document.createElement("span");
+  headingInfo.textContent = "AI-generated educational review";
+
+  heading.append(headingTitle, headingInfo);
+  aiResult.appendChild(heading);
+
+  const grid = document.createElement("div");
+  grid.className = "ai-grid";
+
+  sections.forEach(section => {
+    const card = document.createElement("article");
+    card.className = "ai-section";
+
+    const title = section.title.toLowerCase();
+
+    if (
+      title.includes("possible setup") ||
+      title.includes("trade setup")
+    ) {
+      card.classList.add("ai-setup");
+    }
+
+    if (
+      title.includes("risk") ||
+      title.includes("invalidation") ||
+      title.includes("missing information")
+    ) {
+      card.classList.add("full");
+    }
+
+    const cardTitle = document.createElement("h3");
+    cardTitle.textContent = section.title;
+    card.appendChild(cardTitle);
+
+    const bodyText = section.body.join("\n").trim();
+
+    if (title.includes("possible setup") || title.includes("trade setup")) {
+      const pill = document.createElement("span");
+      const upper = bodyText.toUpperCase();
+
+      if (upper.includes("NO CLEAR SETUP")) {
+        pill.className = "ai-status-pill no-setup";
+        pill.textContent = "NO CLEAR SETUP";
+      } else if (/\bBUY\b/.test(upper)) {
+        pill.className = "ai-status-pill buy";
+        pill.textContent = "BUY MENTIONED · VERIFY";
+      } else if (/\bSELL\b/.test(upper)) {
+        pill.className = "ai-status-pill sell";
+        pill.textContent = "SELL MENTIONED · VERIFY";
+      } else {
+        pill.className = "ai-status-pill";
+        pill.textContent = "REVIEW SETUP";
+      }
+
+      card.appendChild(pill);
+    }
+
+    const body = document.createElement("p");
+    body.className = "ai-section-body";
+    body.textContent = bodyText || "No details were provided.";
+
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  aiResult.appendChild(grid);
+
+  if (disclaimer) {
+    const warning = document.createElement("div");
+    warning.className = "notice";
+    warning.textContent = disclaimer;
+    aiResult.appendChild(warning);
+  }
+
+  aiResult.style.display = "block";
+}
 
 analyzeBtn.addEventListener("click", async () => {
   if (!selectedChart) {
@@ -783,11 +1018,12 @@ analyzeBtn.addEventListener("click", async () => {
 
   analyzeBtn.disabled = true;
   analyzeBtn.textContent = "Analyzing...";
+  aiStatus.style.color = "var(--muted)";
   aiStatus.textContent =
-    "Sending chart securely to PipNex Flow AI...";
+    "Sending chart to PipNex Flow AI...";
 
   aiResult.style.display = "none";
-  aiResult.textContent = "";
+  aiResult.replaceChildren();
 
   const formData = new FormData();
   formData.append("chart", selectedChart);
@@ -810,40 +1046,35 @@ analyzeBtn.addEventListener("click", async () => {
     }
 
     if (!response.ok) {
-      throw new Error(
-        result.error || "Chart analysis failed."
-      );
+      const serverError =
+        typeof result.error === "string"
+          ? result.error
+          : result.error?.message || "Chart analysis failed.";
+
+      throw new Error(serverError);
     }
 
     if (!result.analysis) {
       throw new Error("AI returned an empty analysis.");
     }
 
-    aiResult.textContent =
-      result.analysis +
-      "\n\n" +
-      (result.disclaimer || "Educational analysis only.");
-
-    aiResult.style.display = "block";
+    renderAIAnalysis(
+      result.analysis,
+      result.disclaimer || "Educational analysis only. Verify independently."
+    );
 
     aiStatus.textContent =
       "Analysis complete · " + (result.model || "Gemini AI");
 
   } catch (error) {
-    aiStatus.textContent = error.message;
     aiStatus.style.color = "var(--red)";
+    aiStatus.textContent = error.message;
 
     console.error("Chart AI error:", error);
 
   } finally {
     analyzeBtn.disabled = !selectedChart;
     analyzeBtn.textContent = "Analyze chart";
-
-    if (aiStatus.style.color === "var(--red)") {
-      setTimeout(() => {
-        aiStatus.style.color = "var(--muted)";
-      }, 5000);
-    }
   }
 });
 
@@ -860,9 +1091,11 @@ function escapeHTML(value) {
 
 function getStrategies() {
   try {
-    return JSON.parse(
+    const saved = JSON.parse(
       localStorage.getItem("pipnexStrategies") || "[]"
     );
+
+    return Array.isArray(saved) ? saved : [];
   } catch {
     return [];
   }
@@ -884,13 +1117,22 @@ function renderStrategies() {
 
   box.className = "";
 
-  box.innerHTML = list.map((strategy, index) => `
-    <div class="card section">
-      <strong>${escapeHTML(strategy.name)}</strong>
-      <p class="muted">${escapeHTML(strategy.description)}</p>
-      <button class="btn" data-delete="${index}">Delete</button>
-    </div>
-  `).join("");
+  box.innerHTML = list.map((strategy, index) => {
+    const symbol = strategy.symbol || "General";
+    const timeframe = strategy.timeframe || "Not specified";
+
+    return `
+      <div class="card section">
+        <strong>${escapeHTML(strategy.name)}</strong>
+        <div class="strategy-meta">
+          <span>${escapeHTML(symbol)}</span>
+          <span>${escapeHTML(timeframe)}</span>
+        </div>
+        <p class="muted">${escapeHTML(strategy.description)}</p>
+        <button class="btn" data-delete="${index}">Delete</button>
+      </div>
+    `;
+  }).join("");
 
   box.querySelectorAll("[data-delete]").forEach(button => {
     button.addEventListener("click", () => {
@@ -916,6 +1158,9 @@ document.getElementById("saveStrategy")
   const description = document.getElementById("strategyDescription")
     .value.trim();
 
+  const symbol = document.getElementById("strategySymbol").value;
+  const timeframe = document.getElementById("strategyTimeframe").value;
+
   if (!name || !description) {
     alert("Enter a strategy name and rules first.");
     return;
@@ -923,7 +1168,12 @@ document.getElementById("saveStrategy")
 
   const list = getStrategies();
 
-  list.unshift({ name, description });
+  list.unshift({
+    name,
+    description,
+    symbol,
+    timeframe
+  });
 
   localStorage.setItem(
     "pipnexStrategies",
