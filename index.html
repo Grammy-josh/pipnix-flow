@@ -64,11 +64,26 @@ th{color:var(--muted);font-weight:normal}
 .preview{max-width:100%;max-height:280px;margin-top:12px;border-radius:8px}
 .bottom{display:none}
 
-/* CHART AI RESULTS */
+/* CHART AI UPGRADE */
 #aiResult{display:none;margin-top:18px}
 .ai-results-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
 .ai-results-heading strong{font-size:16px}
 .ai-results-heading span{font-size:11px;color:var(--muted)}
+.ai-decision{padding:17px;border:1px solid var(--line);border-radius:12px;margin-bottom:13px;background:var(--panel2)}
+.ai-decision-label{font-size:11px;color:var(--muted);margin-bottom:8px}
+.ai-decision-value{font-size:23px;font-weight:bold;letter-spacing:.4px}
+.ai-decision-value.buy{color:var(--green)}
+.ai-decision-value.sell{color:var(--red)}
+.ai-decision-value.wait{color:var(--gold)}
+.ai-decision-reason{font-size:13px;line-height:1.6;color:var(--muted);margin-top:9px}
+.ai-level-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:13px}
+.ai-level{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px;min-width:0}
+.ai-level-label{font-size:10px;color:var(--muted);margin-bottom:8px}
+.ai-level-value{font-size:14px;font-weight:bold;overflow-wrap:anywhere;line-height:1.5}
+.ai-level-value.entry{color:var(--blue)}
+.ai-level-value.stop{color:var(--red)}
+.ai-level-value.target{color:var(--green)}
+.ai-level-value.rr{color:var(--gold)}
 .ai-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .ai-section{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:15px;min-width:0}
 .ai-section.full{grid-column:1/-1}
@@ -78,12 +93,16 @@ th{color:var(--muted);font-weight:normal}
 .ai-setup h3{color:var(--gold)}
 #aiStatus{margin-top:12px;color:var(--muted);line-height:1.5}
 #analyzeBtn{margin-top:15px}
+.ai-small-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}
+.ai-confidence{border-color:#455b79}
+.ai-confidence h3{color:var(--gold)}
 
 @media(max-width:850px){
 .sidebar{width:185px}
 .main{margin-left:185px}
 .grid{grid-template-columns:1fr 1fr}
 .two{grid-template-columns:1fr}
+.ai-level-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:600px){
 .sidebar{display:none}
@@ -95,6 +114,7 @@ th{color:var(--muted);font-weight:normal}
 .formgrid{grid-template-columns:1fr}
 .ai-grid{grid-template-columns:1fr}
 .ai-section.full{grid-column:auto}
+.ai-level-grid{grid-template-columns:1fr 1fr}
 .bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#0d1523;border-top:1px solid var(--line);justify-content:space-around;padding:9px 2px;z-index:5}
 .bottom button{background:none;border:0;color:var(--muted);font-size:10px}
 .bottom button.active{color:var(--green)}
@@ -608,9 +628,191 @@ chartFile.addEventListener("change", () => {
   aiStatus.textContent = "Image ready. Tap Analyze chart to begin.";
 });
 
-/* Display the AI's existing response in separate cards.
-   The renderer does not invent entries, levels or signals. */
-function renderAIAnalysis(analysis, disclaimer) {
+// Read a numbered section from Gemini's response
+function getSection(sections, keywords) {
+  return sections.find(section => {
+    const title = section.title.toLowerCase();
+    return keywords.some(keyword => title.includes(keyword));
+  }) || null;
+}
+
+// Remove Markdown decoration for display
+function cleanText(value) {
+  return String(value || "")
+    .replace(/\*\*/g, "")
+    .replace(/__/g, "")
+    .trim();
+}
+
+// Identify the final decision from the actual AI response
+function getDecision(sections, fullText) {
+  const finalSection = getSection(sections, ["final decision"]);
+  const text = cleanText(
+    finalSection ? finalSection.body.join("\n") : fullText
+  );
+
+  if (/\bWAIT\s*\/\s*NO TRADE\b/i.test(text)) {
+    return "WAIT / NO TRADE";
+  }
+
+  if (/\bBUY BIAS\b/i.test(text)) {
+    return "BUY BIAS";
+  }
+
+  if (/\bSELL BIAS\b/i.test(text)) {
+    return "SELL BIAS";
+  }
+
+  if (/^\s*BUY\b/i.test(text)) {
+    return "BUY";
+  }
+
+  if (/^\s*SELL\b/i.test(text)) {
+    return "SELL";
+  }
+
+  return "NO CLEAR DECISION";
+}
+
+// Find a short explanation without inventing one
+function getDecisionReason(sections) {
+  const finalSection = getSection(sections, ["final decision"]);
+
+  if (finalSection) {
+    const body = cleanText(finalSection.body.join("\n"))
+      .replace(/^\s*[-*]\s*/, "")
+      .trim();
+
+    if (body) return body;
+  }
+
+  const setup = getSection(sections, ["possible trade setup", "trade setup"]);
+
+  if (setup) {
+    return cleanText(setup.body.join("\n"));
+  }
+
+  return "Review the full analysis below. No additional decision explanation was provided.";
+}
+
+// Extract a numeric price only when exactly one number is present
+function extractSinglePrice(section) {
+  if (!section) return null;
+
+  const text = cleanText(section.body.join(" "));
+
+  // A range or multiple numerical values is deliberately rejected.
+  const matches = text.match(/-?\d{1,3}(?:,\d{3})*(?:\.\d+)?|-?\d+\.\d+/g);
+
+  if (!matches || matches.length !== 1) return null;
+
+  const value = Number(matches[0].replace(/,/g, ""));
+
+  return Number.isFinite(value) ? value : null;
+}
+
+// Calculate R:R only when the AI supplies one clear price
+// for entry, stop loss and target, with valid trade direction.
+function calculateRR(sections, decision) {
+  const entrySection = getSection(sections, ["possible entry zone", "entry zone"]);
+  const stopSection = getSection(sections, ["stop loss"]);
+  const targetSection = getSection(sections, ["take profit"]);
+
+  const entry = extractSinglePrice(entrySection);
+  const stop = extractSinglePrice(stopSection);
+  const target = extractSinglePrice(targetSection);
+
+  if (entry === null || stop === null || target === null) {
+    return null;
+  }
+
+  let risk;
+  let reward;
+
+  if (/BUY/i.test(decision)) {
+    risk = entry - stop;
+    reward = target - entry;
+  } else if (/SELL/i.test(decision)) {
+    risk = stop - entry;
+    reward = entry - target;
+  } else {
+    return null;
+  }
+
+  if (risk <= 0 || reward <= 0) return null;
+
+  return reward / risk;
+}
+
+// Create a section card safely using textContent
+function createAISection(section) {
+  const card = document.createElement("article");
+  card.className = "ai-section";
+
+  const title = section.title.toLowerCase();
+
+  if (
+    title.includes("possible trade setup") ||
+    title.includes("trade setup")
+  ) {
+    card.classList.add("ai-setup");
+  }
+
+  if (
+    title.includes("risk") ||
+    title.includes("invalidation") ||
+    title.includes("confirmation")
+  ) {
+    card.classList.add("full");
+  }
+
+  if (title.includes("confidence")) {
+    card.classList.add("ai-confidence");
+  }
+
+  const heading = document.createElement("h3");
+  heading.textContent = section.title;
+
+  const body = document.createElement("p");
+  body.className = "ai-section-body";
+  body.textContent =
+    cleanText(section.body.join("\n")) || "No details were provided.";
+
+  card.append(heading, body);
+
+  return card;
+}
+
+function addLevelCard(container, label, value, className) {
+  const card = document.createElement("div");
+  card.className = "ai-level";
+
+  const title = document.createElement("div");
+  title.className = "ai-level-label";
+  title.textContent = label;
+
+  const content = document.createElement("div");
+  content.className = "ai-level-value " + className;
+  content.textContent = value;
+
+  card.append(title, content);
+  container.appendChild(card);
+}
+
+function getSectionSummary(sections, keywords) {
+  const section = getSection(sections, keywords);
+
+  if (!section) return "Not provided";
+
+  const text = cleanText(section.body.join(" "))
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text || "Not provided";
+}
+
+// Render the full AI response
+function renderAIAnalysis(analysis) {
   const source = String(analysis || "").trim();
 
   if (!source) {
@@ -626,11 +828,16 @@ function renderAIAnalysis(analysis, disclaimer) {
 
     if (heading) {
       current = {
-        title: heading[1].replace(/\*\*/g, "").trim(),
+        title: cleanText(heading[1]),
         body: []
       };
       sections.push(current);
     } else if (current) {
+      // Avoid showing repeated footer disclaimers inside result cards.
+      if (/^\s*(disclaimer:|educational analysis only\.)/i.test(line)) {
+        return;
+      }
+
       current.body.push(line);
     }
   });
@@ -656,55 +863,171 @@ function renderAIAnalysis(analysis, disclaimer) {
   heading.append(headingTitle, headingInfo);
   aiResult.appendChild(heading);
 
+  const decision = getDecision(sections, source);
+
+  // Main decision panel
+  const decisionCard = document.createElement("div");
+  decisionCard.className = "ai-decision";
+
+  const decisionLabel = document.createElement("div");
+  decisionLabel.className = "ai-decision-label";
+  decisionLabel.textContent = "PIPNEX FLOW · FINAL DECISION";
+
+  const decisionValue = document.createElement("div");
+  decisionValue.className = "ai-decision-value";
+
+  if (/BUY/i.test(decision)) {
+    decisionValue.classList.add("buy");
+  } else if (/SELL/i.test(decision)) {
+    decisionValue.classList.add("sell");
+  } else {
+    decisionValue.classList.add("wait");
+  }
+
+  decisionValue.textContent = decision;
+
+  const decisionReason = document.createElement("div");
+  decisionReason.className = "ai-decision-reason";
+  decisionReason.textContent = getDecisionReason(sections);
+
+  decisionCard.append(
+    decisionLabel,
+    decisionValue,
+    decisionReason
+  );
+
+  aiResult.appendChild(decisionCard);
+
+  // Entry, stop, target and R:R overview
+  const entry = getSectionSummary(sections, ["possible entry zone", "entry zone"]);
+  const stop = getSectionSummary(sections, ["stop loss"]);
+  const target = getSectionSummary(sections, ["take profit"]);
+
+  const rr = calculateRR(sections, decision);
+
+  const levels = document.createElement("div");
+  levels.className = "ai-level-grid";
+
+  addLevelCard(levels, "POSSIBLE ENTRY", entry, "entry");
+  addLevelCard(levels, "STOP LOSS", stop, "stop");
+  addLevelCard(levels, "TAKE PROFIT", target, "target");
+  addLevelCard(
+    levels,
+    "RISK : REWARD",
+    rr === null ? "Unavailable" : "1 : " + rr.toFixed(2),
+    "rr"
+  );
+
+  aiResult.appendChild(levels);
+
+  const rrNote = document.createElement("div");
+  rrNote.className = "ai-small-note";
+  rrNote.textContent =
+    "Risk-to-reward is calculated only when the AI provides one unambiguous entry, stop and target price with valid trade direction. Otherwise it remains unavailable.";
+  aiResult.appendChild(rrNote);
+
+  // Confidence is never invented by the frontend
+  const confidenceSection = getSection(sections, ["confidence assessment", "confidence"]);
+
+  if (confidenceSection) {
+    const confidenceCard = createAISection(confidenceSection);
+    confidenceCard.classList.add("full");
+    aiResult.appendChild(confidenceCard);
+  } else {
+    const confidenceCard = document.createElement("article");
+    confidenceCard.className = "ai-section ai-confidence full";
+
+    const confidenceTitle = document.createElement("h3");
+    confidenceTitle.textContent = "Confidence assessment";
+
+    const confidenceBody = document.createElement("p");
+    confidenceBody.className = "ai-section-body";
+    confidenceBody.textContent =
+      "The AI did not provide a separate confidence assessment. No confidence percentage is invented.";
+
+    confidenceCard.append(confidenceTitle, confidenceBody);
+    aiResult.appendChild(confidenceCard);
+  }
+
+  // Full detailed analysis
+  const detailsTitle = document.createElement("div");
+  detailsTitle.className = "ai-results-heading section";
+
+  const detailsHeading = document.createElement("strong");
+  detailsHeading.textContent = "Detailed analysis";
+
+  detailsTitle.appendChild(detailsHeading);
+  aiResult.appendChild(detailsTitle);
+
   const grid = document.createElement("div");
   grid.className = "ai-grid";
 
   sections.forEach(section => {
-    const card = document.createElement("article");
-    card.className = "ai-section";
-
-    const title = section.title.toLowerCase();
-
     if (
-      title.includes("possible setup") ||
-      title.includes("trade setup")
+      section.title.toLowerCase().includes("confidence")
     ) {
-      card.classList.add("ai-setup");
+      return;
     }
 
-    if (
-      title.includes("risk") ||
-      title.includes("invalidation") ||
-      title.includes("missing information")
-    ) {
-      card.classList.add("full");
-    }
-
-    const cardTitle = document.createElement("h3");
-    cardTitle.textContent = section.title;
-    card.appendChild(cardTitle);
-
-    const body = document.createElement("p");
-    body.className = "ai-section-body";
-    body.textContent =
-      section.body.join("\n").trim() || "No details were provided.";
-
-    card.appendChild(body);
-    grid.appendChild(card);
+    grid.appendChild(createAISection(section));
   });
 
   aiResult.appendChild(grid);
-
-  if (disclaimer) {
-    const warning = document.createElement("div");
-    warning.className = "notice";
-    warning.textContent = disclaimer;
-    aiResult.appendChild(warning);
-  }
-
   aiResult.style.display = "block";
 }
 
+// File validation and preview
+chartFile.addEventListener("change", () => {
+  const file = chartFile.files[0];
+
+  selectedChart = null;
+  analyzeBtn.disabled = true;
+  aiResult.style.display = "none";
+  aiResult.replaceChildren();
+
+  if (previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = null;
+  }
+
+  chartPreview.hidden = true;
+  chartPreview.removeAttribute("src");
+
+  if (!file) {
+    aiStatus.textContent = "Choose an image to begin.";
+    return;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if (!allowedTypes.includes(file.type)) {
+    aiStatus.textContent = "Please choose a JPEG, PNG or WebP image.";
+    chartFile.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    aiStatus.textContent = "Image is too large. Maximum size is 5 MB.";
+    chartFile.value = "";
+    return;
+  }
+
+  selectedChart = file;
+  previewUrl = URL.createObjectURL(file);
+
+  chartPreview.src = previewUrl;
+  chartPreview.hidden = false;
+
+  analyzeBtn.disabled = false;
+  aiStatus.style.color = "var(--muted)";
+  aiStatus.textContent = "Image ready. Tap Analyze chart to begin.";
+});
+
+// Send chart to backend
 analyzeBtn.addEventListener("click", async () => {
   if (!selectedChart) {
     aiStatus.textContent = "Please select a chart image first.";
@@ -749,10 +1072,7 @@ analyzeBtn.addEventListener("click", async () => {
       throw new Error("AI returned an empty analysis.");
     }
 
-    renderAIAnalysis(
-      result.analysis,
-      result.disclaimer || "Educational analysis only. Verify independently."
-    );
+    renderAIAnalysis(result.analysis);
 
     aiStatus.textContent =
       "Analysis complete · " + (result.model || "Gemini AI");
