@@ -838,3 +838,185 @@ analyzeBtn.addEventListener("click", async () => {
   } finally {
     analyzeBtn.disabled = !selectedChart;
     analyzeBtn.textContent = "Analyze chart";
+
+    if (aiStatus.style.color === "var(--red)") {
+      setTimeout(() => {
+        aiStatus.style.color = "var(--muted)";
+      }, 5000);
+    }
+  }
+});
+
+// STRATEGY STORAGE
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[c]));
+}
+
+function getStrategies() {
+  try {
+    return JSON.parse(
+      localStorage.getItem("pipnexStrategies") || "[]"
+    );
+  } catch {
+    return [];
+  }
+}
+
+function renderStrategies() {
+  const list = getStrategies();
+
+  document.getElementById("strategyCount").textContent =
+    list.length;
+
+  const box = document.getElementById("savedStrategies");
+
+  if (!list.length) {
+    box.className = "empty";
+    box.textContent = "No saved strategies yet.";
+    return;
+  }
+
+  box.className = "";
+
+  box.innerHTML = list.map((strategy, index) => `
+    <div class="card section">
+      <strong>${escapeHTML(strategy.name)}</strong>
+      <p class="muted">${escapeHTML(strategy.description)}</p>
+      <button class="btn" data-delete="${index}">Delete</button>
+    </div>
+  `).join("");
+
+  box.querySelectorAll("[data-delete]").forEach(button => {
+    button.addEventListener("click", () => {
+      const items = getStrategies();
+
+      items.splice(Number(button.dataset.delete), 1);
+
+      localStorage.setItem(
+        "pipnexStrategies",
+        JSON.stringify(items)
+      );
+
+      renderStrategies();
+    });
+  });
+}
+
+document.getElementById("saveStrategy")
+.addEventListener("click", () => {
+  const name = document.getElementById("strategyName")
+    .value.trim();
+
+  const description = document.getElementById("strategyDescription")
+    .value.trim();
+
+  if (!name || !description) {
+    alert("Enter a strategy name and rules first.");
+    return;
+  }
+
+  const list = getStrategies();
+
+  list.unshift({ name, description });
+
+  localStorage.setItem(
+    "pipnexStrategies",
+    JSON.stringify(list)
+  );
+
+  document.getElementById("strategyName").value = "";
+  document.getElementById("strategyDescription").value = "";
+
+  renderStrategies();
+
+  alert("Strategy saved on this device.");
+});
+
+renderStrategies();
+
+// RISK CALCULATOR
+function calculateRisk() {
+  const balance = Math.max(
+    0,
+    Number(document.getElementById("balance").value) || 0
+  );
+
+  const percent = Math.max(
+    0,
+    Number(document.getElementById("riskPercent").value) || 0
+  );
+
+  const distance = Math.max(
+    0,
+    Number(document.getElementById("stopDistance").value) || 0
+  );
+
+  const value = Math.max(
+    0,
+    Number(document.getElementById("pipValue").value) || 0
+  );
+
+  const risk = balance * percent / 100;
+
+  const lots = distance * value > 0
+    ? risk / (distance * value)
+    : 0;
+
+  document.getElementById("riskAmount").textContent =
+    "$" + risk.toFixed(2);
+
+  document.getElementById("lotSize").textContent =
+    lots.toFixed(4);
+}
+
+[
+  "balance",
+  "riskPercent",
+  "stopDistance",
+  "pipValue"
+].forEach(id => {
+  document.getElementById(id)
+    .addEventListener("input", calculateRisk);
+});
+
+calculateRisk();
+
+// CHECK AI SERVICE CONFIGURATION
+async function checkAIService() {
+  const settings = document.getElementById("settingsAI");
+
+  try {
+    const response = await fetch(API + "/api/health");
+
+    if (!response.ok) {
+      throw new Error("Health check failed");
+    }
+
+    const result = await response.json();
+
+    if (result.chartAIConfigured) {
+      settings.textContent = "Configured";
+      settings.className = "green";
+    } else {
+      settings.textContent = "Not configured";
+      settings.className = "red";
+    }
+
+  } catch (error) {
+    settings.textContent = "Unavailable";
+    settings.className = "red";
+    console.error("AI health check:", error);
+  }
+}
+
+checkAIService();
+
+</script>
+</body>
+</html>
