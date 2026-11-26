@@ -6,48 +6,232 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080d17">
 <title>PipNex Flow</title>
+
 <style>
-:root{--bg:#080d17;--panel:#111a29;--line:#26364c;--text:#edf3fc;--muted:#91a0b7;--green:#18ce98;--red:#ff667b;--blue:#70a4ff}
+:root{
+--bg:#080d17;
+--panel:#111a29;
+--line:#26364c;
+--text:#edf3fc;
+--muted:#91a0b7;
+--green:#18ce98;
+--red:#ff667b;
+--blue:#70a4ff;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font:14px Arial,sans-serif;
+}
 button,input,textarea{font:inherit}
 button{cursor:pointer}
-.sidebar{position:fixed;inset:0 auto 0 0;width:220px;background:#0d1523;border-right:1px solid var(--line);padding:20px 13px}
-.brand{font-size:21px;font-weight:bold;padding:8px;margin-bottom:25px}.brand span{color:var(--green)}
-.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--muted);padding:13px;border-radius:9px;margin:3px 0}
-.nav button.active,.nav button:hover{background:#1a2a40;color:white}
-.main{margin-left:220px;padding:24px;max-width:1500px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;color:var(--muted);font-size:12px}
-.status{color:var(--green);border:1px solid #205b4b;border-radius:20px;padding:7px 10px}
-.page{display:none}.page.active{display:block}
-h1{font-size:25px;margin:0 0 7px}h2{font-size:15px;margin:0 0 14px}
+.sidebar{
+position:fixed;
+inset:0 auto 0 0;
+width:220px;
+background:#0d1523;
+border-right:1px solid var(--line);
+padding:20px 13px;
+}
+.brand{
+font-size:21px;
+font-weight:bold;
+padding:8px;
+margin-bottom:25px;
+}
+.brand span{color:var(--green)}
+.nav button{
+display:block;
+width:100%;
+text-align:left;
+background:none;
+border:0;
+color:var(--muted);
+padding:13px;
+border-radius:9px;
+margin:3px 0;
+}
+.nav button.active,.nav button:hover{
+background:#1a2a40;
+color:white;
+}
+.main{
+margin-left:220px;
+padding:24px;
+max-width:1500px;
+}
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+color:var(--muted);
+font-size:12px;
+}
+.status{
+color:var(--green);
+border:1px solid #205b4b;
+border-radius:20px;
+padding:7px 10px;
+}
+.page{display:none}
+.page.active{display:block}
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:15px;margin:0 0 14px}
 .sub{color:var(--muted);margin:0 0 20px}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
-.two{display:grid;grid-template-columns:1.3fr 1fr;gap:13px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}
+.grid{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:13px;
+}
+.two{
+display:grid;
+grid-template-columns:1.3fr 1fr;
+gap:13px;
+}
+.card{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:13px;
+padding:17px;
+min-width:0;
+}
 .label{font-size:11px;color:var(--muted)}
 .metric{font-size:23px;font-weight:bold;margin:9px 0}
-.muted{color:var(--muted)}.green{color:var(--green)}.red{color:var(--red)}
+.muted{color:var(--muted)}
+.green{color:var(--green)}
+.red{color:var(--red)}
 .section{margin-top:16px}
 table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px 7px;border-bottom:1px solid var(--line);font-size:12px}
+th,td{
+text-align:left;
+padding:12px 7px;
+border-bottom:1px solid var(--line);
+font-size:12px;
+}
 th{color:var(--muted);font-weight:normal}
-.badge{font-size:10px;padding:5px 8px;border-radius:20px;background:#1b2b40;color:var(--blue)}
-.btn{padding:10px 14px;border:0;border-radius:8px;background:var(--green);color:#07170f;font-weight:bold}
+.badge{
+font-size:10px;
+padding:5px 8px;
+border-radius:20px;
+background:#1b2b40;
+color:var(--blue);
+}
+.btn{
+padding:10px 14px;
+border:0;
+border-radius:8px;
+background:var(--green);
+color:#07170f;
+font-weight:bold;
+}
+.btn:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
 .field{display:block;margin:12px 0}
-.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
-.field input,.field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#0b1421;color:white}
+.field label{
+display:block;
+color:var(--muted);
+font-size:12px;
+margin-bottom:6px;
+}
+.field input,.field textarea{
+width:100%;
+padding:11px;
+border:1px solid var(--line);
+border-radius:8px;
+background:#0b1421;
+color:white;
+}
 .field textarea{min-height:100px}
-.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.notice{background:#251f13;border:1px solid #69532b;color:#f2d18c;padding:12px;border-radius:9px;font-size:12px;margin-top:15px}
-.empty{text-align:center;color:var(--muted);padding:20px}
-.upload{padding:25px;text-align:center;border:1px dashed #405a76;border-radius:10px}
-.preview{max-width:100%;max-height:280px;margin-top:12px}
+.formgrid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+.notice{
+background:#251f13;
+border:1px solid #69532b;
+color:#f2d18c;
+padding:12px;
+border-radius:9px;
+font-size:12px;
+margin-top:15px;
+}
+.empty{
+text-align:center;
+color:var(--muted);
+padding:20px;
+}
+.upload{
+padding:25px;
+text-align:center;
+border:1px dashed #405a76;
+border-radius:10px;
+}
+.preview{
+max-width:100%;
+max-height:280px;
+margin-top:12px;
+border-radius:8px;
+}
 .bottom{display:none}
-@media(max-width:850px){.sidebar{width:185px}.main{margin-left:185px}.grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
-@media(max-width:600px){.sidebar{display:none}.main{margin:0;padding:17px 13px 85px}.grid{gap:9px}.card{padding:13px}.metric{font-size:20px}.top .status{display:none}.formgrid{grid-template-columns:1fr}.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#0d1523;border-top:1px solid var(--line);justify-content:space-around;padding:9px 2px;z-index:5}.bottom button{background:none;border:0;color:var(--muted);font-size:10px}.bottom button.active{color:var(--green)}}
+#aiResult{
+display:none;
+margin-top:17px;
+padding:16px;
+background:#0b1421;
+border:1px solid var(--line);
+border-radius:10px;
+white-space:pre-wrap;
+line-height:1.7;
+overflow-wrap:anywhere;
+}
+#aiStatus{
+margin-top:12px;
+color:var(--muted);
+}
+#analyzeBtn{margin-top:15px}
+@media(max-width:850px){
+.sidebar{width:185px}
+.main{margin-left:185px}
+.grid{grid-template-columns:1fr 1fr}
+.two{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+.sidebar{display:none}
+.main{margin:0;padding:17px 13px 85px}
+.grid{gap:9px}
+.card{padding:13px}
+.metric{font-size:20px}
+.top .status{display:none}
+.formgrid{grid-template-columns:1fr}
+.bottom{
+display:flex;
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#0d1523;
+border-top:1px solid var(--line);
+justify-content:space-around;
+padding:9px 2px;
+z-index:5;
+}
+.bottom button{
+background:none;
+border:0;
+color:var(--muted);
+font-size:10px;
+}
+.bottom button.active{color:var(--green)}
+}
 </style>
 </head>
+
 <body>
 
 <aside class="sidebar">
@@ -65,11 +249,13 @@ th{color:var(--muted);font-weight:normal}
 </aside>
 
 <main class="main">
+
 <div class="top">
 <span>PipNex Flow / <strong id="crumb">Dashboard</strong></span>
 <span class="status" id="feedStatus">Checking feeds...</span>
 </div>
 
+<!-- DASHBOARD -->
 <section class="page active" id="dashboard">
 <h1>Market Dashboard</h1>
 <p class="sub">Your trading workspace at a glance.</p>
@@ -125,98 +311,193 @@ th{color:var(--muted);font-weight:normal}
 </div>
 </section>
 
+<!-- CHART AI -->
 <section class="page" id="chartai">
 <h1>Chart AI</h1>
-<p class="sub">Upload a chart screenshot for preview.</p>
+<p class="sub">Upload a trading chart for AI-powered educational analysis.</p>
+
 <div class="card">
 <div class="upload">
 <h2>Choose chart screenshot</h2>
-<input type="file" id="chartFile" accept="image/*"><br>
+<p class="muted">JPEG, PNG or WebP · Maximum 5 MB</p>
+
+<input
+type="file"
+id="chartFile"
+accept="image/jpeg,image/png,image/webp"
+>
+
+<br>
+
 <img id="chartPreview" class="preview" hidden>
 </div>
-<div class="notice">AI image analysis is not connected yet. Uploading an image does not generate a trade signal.</div>
+
+<button class="btn" id="analyzeBtn" disabled>
+Analyze chart
+</button>
+
+<div id="aiStatus">Choose an image to begin.</div>
+
+<div id="aiResult"></div>
+
+<div class="notice">
+Educational analysis only. AI can make mistakes.
+Never treat an AI result as a guaranteed trading signal.
+Verify observations independently before making decisions.
+</div>
 </div>
 </section>
 
+<!-- STRATEGY -->
 <section class="page" id="strategy">
 <h1>Strategy Builder</h1>
 <p class="sub">Create and save your trading rules.</p>
+
 <div class="card">
-<div class="field"><label>Strategy name</label><input id="strategyName" placeholder="My strategy"></div>
-<div class="field"><label>Strategy rules</label><textarea id="strategyDescription" placeholder="Entry, exit, timeframe and risk rules..."></textarea></div>
+<div class="field">
+<label>Strategy name</label>
+<input id="strategyName" placeholder="My strategy">
+</div>
+
+<div class="field">
+<label>Strategy rules</label>
+<textarea id="strategyDescription" placeholder="Entry, exit, timeframe and risk rules..."></textarea>
+</div>
+
 <button class="btn" id="saveStrategy">Save strategy</button>
 </div>
-<div class="card section"><h2>Saved strategies</h2><div id="savedStrategies" class="empty">No saved strategies yet.</div></div>
+
+<div class="card section">
+<h2>Saved strategies</h2>
+<div id="savedStrategies" class="empty">No saved strategies yet.</div>
+</div>
 </section>
 
+<!-- RISK -->
 <section class="page" id="risk">
 <h1>Risk Calculator</h1>
 <p class="sub">Simplified position-size estimate.</p>
+
 <div class="card">
 <div class="formgrid">
-<div class="field"><label>Account balance ($)</label><input type="number" id="balance" value="20" min="0"></div>
-<div class="field"><label>Risk (%)</label><input type="number" id="riskPercent" value="1" min="0" max="100"></div>
-<div class="field"><label>Stop distance</label><input type="number" id="stopDistance" value="100" min="0"></div>
-<div class="field"><label>Value per point per lot ($)</label><input type="number" id="pipValue" value="1" min="0"></div>
+<div class="field">
+<label>Account balance ($)</label>
+<input type="number" id="balance" value="20" min="0">
 </div>
+
+<div class="field">
+<label>Risk (%)</label>
+<input type="number" id="riskPercent" value="1" min="0" max="100">
+</div>
+
+<div class="field">
+<label>Stop distance</label>
+<input type="number" id="stopDistance" value="100" min="0">
+</div>
+
+<div class="field">
+<label>Value per point per lot ($)</label>
+<input type="number" id="pipValue" value="1" min="0">
+</div>
+</div>
+
 <div class="grid section">
-<div class="card"><div class="label">Estimated risk</div><div class="metric" id="riskAmount">$0.20</div></div>
-<div class="card"><div class="label">Estimated lot size</div><div class="metric" id="lotSize">0.0020</div></div>
+<div class="card">
+<div class="label">Estimated risk</div>
+<div class="metric" id="riskAmount">$0.20</div>
 </div>
-<div class="notice">This is a simplified estimate, not a trade instruction. Broker contract sizes, tick values, spreads and minimum lot sizes differ. Verify independently.</div>
+
+<div class="card">
+<div class="label">Estimated lot size</div>
+<div class="metric" id="lotSize">0.0020</div>
+</div>
+</div>
+
+<div class="notice">
+This is a simplified estimate, not a trade instruction.
+Broker contract sizes, tick values, spreads and minimum lot sizes differ.
+Verify independently.
+</div>
 </div>
 </section>
 
+<!-- BACKTEST -->
 <section class="page" id="backtest">
 <h1>Backtesting</h1>
 <p class="sub">Strategy performance evaluation.</p>
+
 <div class="card">
 <span class="badge">Not connected</span>
 <h2 class="section">Backtesting engine</h2>
-<p class="muted">Historical candles, spread, fees, slippage and a tested strategy engine are required before valid results can be calculated.</p>
+<p class="muted">
+Historical candles, spread, fees, slippage and a tested strategy engine
+are required before valid results can be calculated.
+</p>
 <p class="muted">No invented win rates or performance results are displayed.</p>
 </div>
 </section>
 
+<!-- BOTS -->
 <section class="page" id="bots">
 <h1>Bots & MT5</h1>
 <p class="sub">Automation workspace.</p>
+
 <div class="card">
 <span class="badge">Not connected</span>
 <h2 class="section">MetaTrader integration</h2>
-<p class="muted">No broker account is connected. This app does not execute trades or hold funds.</p>
+<p class="muted">
+No broker account is connected. This app does not execute trades or hold funds.
+</p>
 <button class="btn" disabled>MT5 connection · Coming later</button>
 </div>
-<div class="card section"><h2>Bot status</h2><div class="empty">No bots running.</div></div>
+
+<div class="card section">
+<h2>Bot status</h2>
+<div class="empty">No bots running.</div>
+</div>
 </section>
 
+<!-- NEWS -->
 <section class="page" id="news">
 <h1>Economic News</h1>
 <p class="sub">Economic events and market calendar.</p>
+
 <div class="card">
 <span class="badge">Calendar not connected</span>
-<p class="muted section">A verified calendar provider has not been connected. No events are displayed.</p>
+<p class="muted section">
+A verified calendar provider has not been connected.
+No events are displayed.
+</p>
 </div>
 </section>
 
+<!-- SETTINGS -->
 <section class="page" id="settings">
 <h1>Settings</h1>
 <p class="sub">Service connection status.</p>
+
 <div class="card">
 <table>
 <tr><td>EURUSD market feed</td><td id="settingsFeed">Checking</td></tr>
 <tr><td>XAUUSD market feed</td><td id="settingsGold">Checking</td></tr>
 <tr><td>BTCUSD market feed</td><td id="settingsBTC">Checking</td></tr>
-<tr><td>AI chart analysis</td><td>Not connected</td></tr>
+<tr><td>AI chart analysis</td><td id="settingsAI">Checking</td></tr>
 <tr><td>Firebase accounts</td><td>Not connected</td></tr>
 <tr><td>MT5 integration</td><td>Not connected</td></tr>
 <tr><td>Push notifications</td><td>Not connected</td></tr>
 </table>
 </div>
-<div class="notice">PipNex Flow is an analysis prototype. Market data can differ from broker execution prices. Trading involves risk. Test on demo first.</div>
+
+<div class="notice">
+PipNex Flow is an analysis prototype.
+Market data can differ from broker execution prices.
+Trading involves risk. Test on demo first.
+</div>
 </section>
+
 </main>
 
+<!-- MOBILE NAVIGATION -->
 <nav class="bottom" id="bottomNav">
 <button class="active" data-page="dashboard">▦<br>Home</button>
 <button data-page="chartai">◉<br>Chart AI</button>
@@ -226,147 +507,199 @@ th{color:var(--muted);font-weight:normal}
 </nav>
 
 <script>
-const API="https://pipnix-flow-api.onrender.com";
+"use strict";
 
-const pages=[...document.querySelectorAll(".page")];
-const navs=[...document.querySelectorAll("[data-page]")];
+const API = "https://pipnix-flow-api.onrender.com";
 
-function showPage(id){
-  pages.forEach(p=>p.classList.toggle("active",p.id===id));
-  navs.forEach(b=>b.classList.toggle("active",b.dataset.page===id));
-  const names={dashboard:"Dashboard",chartai:"Chart AI",strategy:"Strategy Builder",risk:"Risk Tools",backtest:"Backtesting",bots:"Bots & MT5",news:"Economic News",settings:"Settings"};
-  document.getElementById("crumb").textContent=names[id]||id;
-  window.scrollTo(0,0);
+// PAGE NAVIGATION
+const pages = [...document.querySelectorAll(".page")];
+const navs = [...document.querySelectorAll("[data-page]")];
+
+function showPage(id) {
+  pages.forEach(page =>
+    page.classList.toggle("active", page.id === id)
+  );
+
+  navs.forEach(button =>
+    button.classList.toggle("active", button.dataset.page === id)
+  );
+
+  const names = {
+    dashboard: "Dashboard",
+    chartai: "Chart AI",
+    strategy: "Strategy Builder",
+    risk: "Risk Tools",
+    backtest: "Backtesting",
+    bots: "Bots & MT5",
+    news: "Economic News",
+    settings: "Settings"
+  };
+
+  document.getElementById("crumb").textContent =
+    names[id] || id;
+
+  window.scrollTo(0, 0);
 }
-navs.forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 
-const feedState={eurusd:false,gold:false,btc:false};
+navs.forEach(button => {
+  button.addEventListener("click", () =>
+    showPage(button.dataset.page)
+  );
+});
 
-function updateFeedStatus(){
-  const status=document.getElementById("feedStatus");
-  const count=Object.values(feedState).filter(Boolean).length;
+// MARKET FEEDS
+const feedState = {
+  eurusd: false,
+  gold: false,
+  btc: false
+};
 
-  if(count===3){
-    status.textContent="● 3 market feeds connected";
-    status.style.color="var(--green)";
-  }else if(count>0){
-    status.textContent="● "+count+" of 3 feeds connected";
-    status.style.color="var(--blue)";
-  }else{
-    status.textContent="● Market feeds unavailable";
-    status.style.color="var(--red)";
+function updateFeedStatus() {
+  const status = document.getElementById("feedStatus");
+  const count = Object.values(feedState).filter(Boolean).length;
+
+  if (count === 3) {
+    status.textContent = "● 3 market feeds connected";
+    status.style.color = "var(--green)";
+  } else if (count > 0) {
+    status.textContent = "● " + count + " of 3 feeds connected";
+    status.style.color = "var(--blue)";
+  } else {
+    status.textContent = "● Market feeds unavailable";
+    status.style.color = "var(--red)";
   }
 }
 
-async function loadEURUSD(){
-  const settings=document.getElementById("settingsFeed");
+async function loadEURUSD() {
+  const settings = document.getElementById("settingsFeed");
 
-  try{
-    const response=await fetch(API+"/api/market/forex/EURUSD");
-    if(!response.ok)throw new Error("Feed unavailable");
+  try {
+    const response = await fetch(
+      API + "/api/market/forex/EURUSD"
+    );
 
-    const result=await response.json();
-    const price=Number(result.data?.p);
-    if(!Number.isFinite(price))throw new Error("Invalid price");
+    if (!response.ok) throw new Error("Feed unavailable");
 
-    const formatted=price.toFixed(5);
+    const result = await response.json();
+    const price = Number(result.data?.p);
 
-    document.getElementById("eurusdPrice").textContent=formatted;
-    document.getElementById("watchEURUSD").textContent=formatted;
-    document.getElementById("eurusdTime").textContent="Provider: SiftingIO";
-    document.getElementById("watchEURSource").textContent="SiftingIO";
+    if (!Number.isFinite(price)) {
+      throw new Error("Invalid price");
+    }
 
-    settings.textContent="Connected";
-    settings.className="green";
-    feedState.eurusd=true;
+    const formatted = price.toFixed(5);
 
-  }catch(error){
-    document.getElementById("eurusdPrice").textContent="Unavailable";
-    document.getElementById("watchEURUSD").textContent="Unavailable";
-    document.getElementById("eurusdTime").textContent="Could not load feed";
-    document.getElementById("watchEURSource").textContent="Unavailable";
+    document.getElementById("eurusdPrice").textContent = formatted;
+    document.getElementById("watchEURUSD").textContent = formatted;
+    document.getElementById("eurusdTime").textContent = "Provider: SiftingIO";
+    document.getElementById("watchEURSource").textContent = "SiftingIO";
 
-    settings.textContent="Unavailable";
-    settings.className="red";
-    feedState.eurusd=false;
-    console.error("EURUSD feed error:",error);
+    settings.textContent = "Connected";
+    settings.className = "green";
+    feedState.eurusd = true;
+
+  } catch (error) {
+    document.getElementById("eurusdPrice").textContent = "Unavailable";
+    document.getElementById("watchEURUSD").textContent = "Unavailable";
+    document.getElementById("eurusdTime").textContent = "Could not load feed";
+    document.getElementById("watchEURSource").textContent = "Unavailable";
+
+    settings.textContent = "Unavailable";
+    settings.className = "red";
+    feedState.eurusd = false;
+
+    console.error("EURUSD feed error:", error);
   }
 
   updateFeedStatus();
 }
 
-async function loadGold(){
-  const settings=document.getElementById("settingsGold");
+async function loadGold() {
+  const settings = document.getElementById("settingsGold");
 
-  try{
-    const response=await fetch(API+"/api/market/commodities/XAUUSD");
-    if(!response.ok)throw new Error("Gold feed unavailable");
+  try {
+    const response = await fetch(
+      API + "/api/market/commodities/XAUUSD"
+    );
 
-    const result=await response.json();
-    const price=Number(result.data?.p);
-    if(!Number.isFinite(price))throw new Error("Invalid Gold price");
+    if (!response.ok) throw new Error("Gold feed unavailable");
 
-    const formatted=price.toFixed(2);
+    const result = await response.json();
+    const price = Number(result.data?.p);
 
-    document.getElementById("goldPrice").textContent=formatted;
-    document.getElementById("watchGold").textContent=formatted;
-    document.getElementById("goldTime").textContent="Provider: SiftingIO";
-    document.getElementById("watchGoldSource").textContent="SiftingIO";
+    if (!Number.isFinite(price)) {
+      throw new Error("Invalid Gold price");
+    }
 
-    settings.textContent="Connected";
-    settings.className="green";
-    feedState.gold=true;
+    const formatted = price.toFixed(2);
 
-  }catch(error){
-    document.getElementById("goldPrice").textContent="Unavailable";
-    document.getElementById("watchGold").textContent="Unavailable";
-    document.getElementById("goldTime").textContent="Could not load Gold";
-    document.getElementById("watchGoldSource").textContent="Unavailable";
+    document.getElementById("goldPrice").textContent = formatted;
+    document.getElementById("watchGold").textContent = formatted;
+    document.getElementById("goldTime").textContent = "Provider: SiftingIO";
+    document.getElementById("watchGoldSource").textContent = "SiftingIO";
 
-    settings.textContent="Unavailable";
-    settings.className="red";
-    feedState.gold=false;
-    console.error("Gold feed error:",error);
+    settings.textContent = "Connected";
+    settings.className = "green";
+    feedState.gold = true;
+
+  } catch (error) {
+    document.getElementById("goldPrice").textContent = "Unavailable";
+    document.getElementById("watchGold").textContent = "Unavailable";
+    document.getElementById("goldTime").textContent = "Could not load Gold";
+    document.getElementById("watchGoldSource").textContent = "Unavailable";
+
+    settings.textContent = "Unavailable";
+    settings.className = "red";
+    feedState.gold = false;
+
+    console.error("Gold feed error:", error);
   }
 
   updateFeedStatus();
 }
 
-async function loadBTC(){
-  const settings=document.getElementById("settingsBTC");
+async function loadBTC() {
+  const settings = document.getElementById("settingsBTC");
 
-  try{
-    const response=await fetch(API+"/api/market/crypto/BTCUSD");
-    if(!response.ok)throw new Error("Bitcoin feed unavailable");
+  try {
+    const response = await fetch(
+      API + "/api/market/crypto/BTCUSD"
+    );
 
-    const result=await response.json();
-    const price=Number(result.data?.p);
-    if(!Number.isFinite(price))throw new Error("Invalid Bitcoin price");
+    if (!response.ok) throw new Error("Bitcoin feed unavailable");
 
-    const formatted=price.toLocaleString("en-US",{
-      minimumFractionDigits:2,
-      maximumFractionDigits:2
+    const result = await response.json();
+    const price = Number(result.data?.p);
+
+    if (!Number.isFinite(price)) {
+      throw new Error("Invalid Bitcoin price");
+    }
+
+    const formatted = price.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     });
 
-    document.getElementById("btcPrice").textContent=formatted;
-    document.getElementById("watchBTC").textContent=formatted;
-    document.getElementById("btcTime").textContent="Provider: SiftingIO";
-    document.getElementById("watchBTCSource").textContent="SiftingIO";
+    document.getElementById("btcPrice").textContent = formatted;
+    document.getElementById("watchBTC").textContent = formatted;
+    document.getElementById("btcTime").textContent = "Provider: SiftingIO";
+    document.getElementById("watchBTCSource").textContent = "SiftingIO";
 
-    settings.textContent="Connected";
-    settings.className="green";
-    feedState.btc=true;
+    settings.textContent = "Connected";
+    settings.className = "green";
+    feedState.btc = true;
 
-  }catch(error){
-    document.getElementById("btcPrice").textContent="Unavailable";
-    document.getElementById("watchBTC").textContent="Unavailable";
-    document.getElementById("btcTime").textContent="Could not load Bitcoin";
-    document.getElementById("watchBTCSource").textContent="Unavailable";
+  } catch (error) {
+    document.getElementById("btcPrice").textContent = "Unavailable";
+    document.getElementById("watchBTC").textContent = "Unavailable";
+    document.getElementById("btcTime").textContent = "Could not load Bitcoin";
+    document.getElementById("watchBTCSource").textContent = "Unavailable";
 
-    settings.textContent="Unavailable";
-    settings.className="red";
-    feedState.btc=false;
-    console.error("BTCUSD feed error:",error);
+    settings.textContent = "Unavailable";
+    settings.className = "red";
+    feedState.btc = false;
+
+    console.error("BTCUSD feed error:", error);
   }
 
   updateFeedStatus();
@@ -376,97 +709,132 @@ loadEURUSD();
 loadGold();
 loadBTC();
 
-setInterval(loadEURUSD,60000);
-setInterval(loadGold,60000);
-setInterval(loadBTC,60000);
+setInterval(loadEURUSD, 60000);
+setInterval(loadGold, 60000);
+setInterval(loadBTC, 60000);
 
-const chartFile=document.getElementById("chartFile");
-chartFile.addEventListener("change",()=>{
-  const file=chartFile.files[0];
-  if(!file||!file.type.startsWith("image/"))return;
-  const preview=document.getElementById("chartPreview");
-  preview.src=URL.createObjectURL(file);
-  preview.hidden=false;
-});
+// CHART AI
+const chartFile = document.getElementById("chartFile");
+const chartPreview = document.getElementById("chartPreview");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const aiStatus = document.getElementById("aiStatus");
+const aiResult = document.getElementById("aiResult");
 
-function escapeHTML(value){
-  return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+let selectedChart = null;
+let previewUrl = null;
 
-function getStrategies(){
-  try{return JSON.parse(localStorage.getItem("pipnexStrategies")||"[]");}
-  catch{return [];}
-}
+chartFile.addEventListener("change", () => {
+  const file = chartFile.files[0];
 
-function renderStrategies(){
-  const list=getStrategies();
-  document.getElementById("strategyCount").textContent=list.length;
-  const box=document.getElementById("savedStrategies");
+  selectedChart = null;
+  analyzeBtn.disabled = true;
+  aiResult.style.display = "none";
+  aiResult.textContent = "";
 
-  if(!list.length){
-    box.className="empty";
-    box.textContent="No saved strategies yet.";
+  if (previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = null;
+  }
+
+  chartPreview.hidden = true;
+  chartPreview.removeAttribute("src");
+
+  if (!file) {
+    aiStatus.textContent = "Choose an image to begin.";
     return;
   }
 
-  box.className="";
-  box.innerHTML=list.map((s,i)=>`
-    <div class="card section">
-      <strong>${escapeHTML(s.name)}</strong>
-      <p class="muted">${escapeHTML(s.description)}</p>
-      <button class="btn" data-delete="${i}">Delete</button>
-    </div>`).join("");
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
 
-  box.querySelectorAll("[data-delete]").forEach(button=>{
-    button.addEventListener("click",()=>{
-      const items=getStrategies();
-      items.splice(Number(button.dataset.delete),1);
-      localStorage.setItem("pipnexStrategies",JSON.stringify(items));
-      renderStrategies();
-    });
-  });
-}
-
-document.getElementById("saveStrategy").addEventListener("click",()=>{
-  const name=document.getElementById("strategyName").value.trim();
-  const description=document.getElementById("strategyDescription").value.trim();
-
-  if(!name||!description){
-    alert("Enter a strategy name and rules first.");
+  if (!allowedTypes.includes(file.type)) {
+    aiStatus.textContent =
+      "Please choose a JPEG, PNG or WebP image.";
+    chartFile.value = "";
     return;
   }
 
-  const list=getStrategies();
-  list.unshift({name,description});
-  localStorage.setItem("pipnexStrategies",JSON.stringify(list));
+  if (file.size > 5 * 1024 * 1024) {
+    aiStatus.textContent =
+      "Image is too large. Maximum size is 5 MB.";
+    chartFile.value = "";
+    return;
+  }
 
-  document.getElementById("strategyName").value="";
-  document.getElementById("strategyDescription").value="";
-  renderStrategies();
-  alert("Strategy saved on this device.");
+  selectedChart = file;
+  previewUrl = URL.createObjectURL(file);
+
+  chartPreview.src = previewUrl;
+  chartPreview.hidden = false;
+
+  analyzeBtn.disabled = false;
+  aiStatus.textContent =
+    "Image ready. Tap Analyze chart to begin.";
 });
 
-renderStrategies();
+analyzeBtn.addEventListener("click", async () => {
+  if (!selectedChart) {
+    aiStatus.textContent = "Please select a chart image first.";
+    return;
+  }
 
-function calculateRisk(){
-  const balance=Math.max(0,Number(document.getElementById("balance").value)||0);
-  const percent=Math.max(0,Number(document.getElementById("riskPercent").value)||0);
-  const distance=Math.max(0,Number(document.getElementById("stopDistance").value)||0);
-  const value=Math.max(0,Number(document.getElementById("pipValue").value)||0);
+  analyzeBtn.disabled = true;
+  analyzeBtn.textContent = "Analyzing...";
+  aiStatus.textContent =
+    "Sending chart securely to PipNex Flow AI...";
 
-  const risk=balance*percent/100;
-  const lots=distance*value>0?risk/(distance*value):0;
+  aiResult.style.display = "none";
+  aiResult.textContent = "";
 
-  document.getElementById("riskAmount").textContent="$"+risk.toFixed(2);
-  document.getElementById("lotSize").textContent=lots.toFixed(4);
-}
+  const formData = new FormData();
+  formData.append("chart", selectedChart);
 
-["balance","riskPercent","stopDistance","pipValue"].forEach(id=>{
-  document.getElementById(id).addEventListener("input",calculateRisk);
-});
+  try {
+    const response = await fetch(
+      API + "/api/chart/analyze",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
 
-calculateRisk();
-</script>
-</body>
-  </html>
-  
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("Server returned an unreadable response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        result.error || "Chart analysis failed."
+      );
+    }
+
+    if (!result.analysis) {
+      throw new Error("AI returned an empty analysis.");
+    }
+
+    aiResult.textContent =
+      result.analysis +
+      "\n\n" +
+      (result.disclaimer || "Educational analysis only.");
+
+    aiResult.style.display = "block";
+
+    aiStatus.textContent =
+      "Analysis complete · " + (result.model || "Gemini AI");
+
+  } catch (error) {
+    aiStatus.textContent = error.message;
+    aiStatus.style.color = "var(--red)";
+
+    console.error("Chart AI error:", error);
+
+  } finally {
+    analyzeBtn.disabled = !selectedChart;
+    analyzeBtn.textContent = "Analyze chart";
