@@ -21,85 +21,25 @@
 --gold:#f2c879;
 }
 *{box-sizing:border-box}
-body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-font:14px Arial,sans-serif;
-}
+body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-.sidebar{
-position:fixed;
-inset:0 auto 0 0;
-width:220px;
-background:#0d1523;
-border-right:1px solid var(--line);
-padding:20px 13px;
-}
-.brand{
-font-size:21px;
-font-weight:bold;
-padding:8px;
-margin-bottom:25px;
-}
+.sidebar{position:fixed;inset:0 auto 0 0;width:220px;background:#0d1523;border-right:1px solid var(--line);padding:20px 13px}
+.brand{font-size:21px;font-weight:bold;padding:8px;margin-bottom:25px}
 .brand span{color:var(--green)}
-.nav button{
-display:block;
-width:100%;
-text-align:left;
-background:none;
-border:0;
-color:var(--muted);
-padding:13px;
-border-radius:9px;
-margin:3px 0;
-}
-.nav button.active,.nav button:hover{
-background:#1a2a40;
-color:white;
-}
-.main{
-margin-left:220px;
-padding:24px;
-max-width:1500px;
-}
-.top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
-color:var(--muted);
-font-size:12px;
-}
-.status{
-color:var(--green);
-border:1px solid #205b4b;
-border-radius:20px;
-padding:7px 10px;
-}
+.nav button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--muted);padding:13px;border-radius:9px;margin:3px 0}
+.nav button.active,.nav button:hover{background:#1a2a40;color:white}
+.main{margin-left:220px;padding:24px;max-width:1500px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;color:var(--muted);font-size:12px}
+.status{color:var(--green);border:1px solid #205b4b;border-radius:20px;padding:7px 10px}
 .page{display:none}
 .page.active{display:block}
 h1{font-size:25px;margin:0 0 7px}
 h2{font-size:15px;margin:0 0 14px}
 .sub{color:var(--muted);margin:0 0 20px}
-.grid{
-display:grid;
-grid-template-columns:repeat(4,minmax(0,1fr));
-gap:13px;
-}
-.two{
-display:grid;
-grid-template-columns:1.3fr 1fr;
-gap:13px;
-}
-.card{
-background:var(--panel);
-border:1px solid var(--line);
-border-radius:13px;
-padding:17px;
-min-width:0;
-}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}
 .label{font-size:11px;color:var(--muted)}
 .metric{font-size:23px;font-weight:bold;margin:9px 0}
 .muted{color:var(--muted)}
@@ -107,177 +47,38 @@ min-width:0;
 .red{color:var(--red)}
 .section{margin-top:16px}
 table{width:100%;border-collapse:collapse}
-th,td{
-text-align:left;
-padding:12px 7px;
-border-bottom:1px solid var(--line);
-font-size:12px;
-}
+th,td{text-align:left;padding:12px 7px;border-bottom:1px solid var(--line);font-size:12px}
 th{color:var(--muted);font-weight:normal}
-.badge{
-display:inline-block;
-font-size:10px;
-padding:5px 8px;
-border-radius:20px;
-background:#1b2b40;
-color:var(--blue);
-}
-.btn{
-padding:10px 14px;
-border:0;
-border-radius:8px;
-background:var(--green);
-color:#07170f;
-font-weight:bold;
-}
-.btn:disabled{
-opacity:.5;
-cursor:not-allowed;
-}
+.badge{display:inline-block;font-size:10px;padding:5px 8px;border-radius:20px;background:#1b2b40;color:var(--blue)}
+.btn{padding:10px 14px;border:0;border-radius:8px;background:var(--green);color:#07170f;font-weight:bold}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .field{display:block;margin:12px 0}
-.field label{
-display:block;
-color:var(--muted);
-font-size:12px;
-margin-bottom:6px;
-}
-.field input,.field textarea,.field select{
-width:100%;
-padding:11px;
-border:1px solid var(--line);
-border-radius:8px;
-background:#0b1421;
-color:white;
-}
+.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;background:#0b1421;color:white}
 .field select option{background:#0b1421}
 .field textarea{min-height:100px;resize:vertical}
-.formgrid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-.notice{
-background:#251f13;
-border:1px solid #69532b;
-color:#f2d18c;
-padding:12px;
-border-radius:9px;
-font-size:12px;
-margin-top:15px;
-line-height:1.6;
-}
-.empty{
-text-align:center;
-color:var(--muted);
-padding:20px;
-}
-.upload{
-padding:25px;
-text-align:center;
-border:1px dashed #405a76;
-border-radius:10px;
-}
-.preview{
-max-width:100%;
-max-height:280px;
-margin-top:12px;
-border-radius:8px;
-}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.notice{background:#251f13;border:1px solid #69532b;color:#f2d18c;padding:12px;border-radius:9px;font-size:12px;margin-top:15px;line-height:1.6}
+.empty{text-align:center;color:var(--muted);padding:20px}
+.upload{padding:25px;text-align:center;border:1px dashed #405a76;border-radius:10px}
+.preview{max-width:100%;max-height:280px;margin-top:12px;border-radius:8px}
 .bottom{display:none}
 
 /* CHART AI RESULTS */
-#aiResult{
-display:none;
-margin-top:18px;
-}
-.ai-results-heading{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:13px;
-}
-.ai-results-heading strong{
-font-size:16px;
-}
-.ai-results-heading span{
-font-size:11px;
-color:var(--muted);
-}
-.ai-grid{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:12px;
-}
-.ai-section{
-background:var(--panel2);
-border:1px solid var(--line);
-border-radius:11px;
-padding:15px;
-min-width:0;
-}
-.ai-section.full{
-grid-column:1/-1;
-}
-.ai-section h3{
-font-size:13px;
-margin:0 0 11px;
-color:var(--blue);
-}
-.ai-section-body{
-font-size:13px;
-line-height:1.75;
-color:var(--text);
-white-space:pre-wrap;
-overflow-wrap:anywhere;
-margin:0;
-}
-.ai-setup{
-border-color:#52617a;
-}
+#aiResult{display:none;margin-top:18px}
+.ai-results-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.ai-results-heading strong{font-size:16px}
+.ai-results-heading span{font-size:11px;color:var(--muted)}
+.ai-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ai-section{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:15px;min-width:0}
+.ai-section.full{grid-column:1/-1}
+.ai-section h3{font-size:13px;margin:0 0 11px;color:var(--blue)}
+.ai-section-body{font-size:13px;line-height:1.75;color:var(--text);white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.ai-setup{border-color:#52617a}
 .ai-setup h3{color:var(--gold)}
-.ai-status-pill{
-display:inline-block;
-font-size:10px;
-font-weight:bold;
-padding:6px 9px;
-border-radius:20px;
-margin-bottom:11px;
-background:#26364c;
-color:var(--text);
-}
-.ai-status-pill.no-setup{
-background:#332b1d;
-color:var(--gold);
-}
-.ai-status-pill.buy{
-background:#123b31;
-color:var(--green);
-}
-.ai-status-pill.sell{
-background:#3b2029;
-color:var(--red);
-}
-#aiStatus{
-margin-top:12px;
-color:var(--muted);
-line-height:1.5;
-}
+#aiStatus{margin-top:12px;color:var(--muted);line-height:1.5}
 #analyzeBtn{margin-top:15px}
-.strategy-meta{
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-margin:8px 0;
-}
-.strategy-meta span{
-font-size:10px;
-padding:5px 8px;
-border-radius:20px;
-background:#1b2b40;
-color:var(--blue);
-}
+
 @media(max-width:850px){
 .sidebar{width:185px}
 .main{margin-left:185px}
@@ -294,24 +95,8 @@ color:var(--blue);
 .formgrid{grid-template-columns:1fr}
 .ai-grid{grid-template-columns:1fr}
 .ai-section.full{grid-column:auto}
-.bottom{
-display:flex;
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#0d1523;
-border-top:1px solid var(--line);
-justify-content:space-around;
-padding:9px 2px;
-z-index:5;
-}
-.bottom button{
-background:none;
-border:0;
-color:var(--muted);
-font-size:10px;
-}
+.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#0d1523;border-top:1px solid var(--line);justify-content:space-around;padding:9px 2px;z-index:5}
+.bottom button{background:none;border:0;color:var(--muted);font-size:10px}
 .bottom button.active{color:var(--green)}
 }
 </style>
@@ -405,23 +190,14 @@ font-size:10px;
 <div class="upload">
 <h2>Choose chart screenshot</h2>
 <p class="muted">JPEG, PNG or WebP · Maximum 5 MB</p>
-
-<input
-type="file"
-id="chartFile"
-accept="image/jpeg,image/png,image/webp"
->
-
+<input type="file" id="chartFile" accept="image/jpeg,image/png,image/webp">
 <br>
 <img id="chartPreview" class="preview" hidden>
 </div>
 
-<button class="btn" id="analyzeBtn" disabled>
-Analyze chart
-</button>
+<button class="btn" id="analyzeBtn" disabled>Analyze chart</button>
 
 <div id="aiStatus">Choose an image to begin.</div>
-
 <div id="aiResult"></div>
 
 <div class="notice">
@@ -432,38 +208,15 @@ Verify observations independently before making decisions.
 </div>
 </section>
 
-<!-- STRATEGY -->
+<!-- STRATEGY BUILDER -->
 <section class="page" id="strategy">
 <h1>Strategy Builder</h1>
-<p class="sub">Create and save trading rules for a chosen market and timeframe.</p>
+<p class="sub">Create and save your trading rules.</p>
 
 <div class="card">
-
-<div class="formgrid">
 <div class="field">
 <label>Strategy name</label>
-<input id="strategyName" placeholder="My Gold strategy">
-</div>
-
-<div class="field">
-<label>Market symbol</label>
-<select id="strategySymbol">
-<option value="XAUUSD" selected>XAUUSD · Gold</option>
-<option value="EURUSD">EURUSD</option>
-<option value="BTCUSD">BTCUSD</option>
-</select>
-</div>
-
-<div class="field">
-<label>Main timeframe</label>
-<select id="strategyTimeframe">
-<option value="M5">M5 · 5 minutes</option>
-<option value="M15" selected>M15 · 15 minutes</option>
-<option value="M30">M30 · 30 minutes</option>
-<option value="H1">H1 · 1 hour</option>
-<option value="H4">H4 · 4 hours</option>
-</select>
-</div>
+<input id="strategyName" placeholder="My trading strategy">
 </div>
 
 <div class="field">
@@ -480,9 +233,9 @@ Verify observations independently before making decisions.
 </div>
 
 <div class="notice">
-A single-timeframe strategy uses its selected timeframe for all its chart conditions.
-M15 is selected by default for your XAUUSD strategy.
-Saved strategies are stored locally on this device.
+Create strategies for any market and timeframe you choose.
+Your saved strategies are stored locally on this device.
+This builder stores your trading rules; it does not execute trades.
 </div>
 </section>
 
@@ -497,17 +250,14 @@ Saved strategies are stored locally on this device.
 <label>Account balance ($)</label>
 <input type="number" id="balance" value="20" min="0">
 </div>
-
 <div class="field">
 <label>Risk (%)</label>
 <input type="number" id="riskPercent" value="1" min="0" max="100">
 </div>
-
 <div class="field">
 <label>Stop distance</label>
 <input type="number" id="stopDistance" value="100" min="0">
 </div>
-
 <div class="field">
 <label>Value per point per lot ($)</label>
 <input type="number" id="pipValue" value="1" min="0">
@@ -519,7 +269,6 @@ Saved strategies are stored locally on this device.
 <div class="label">Estimated risk</div>
 <div class="metric" id="riskAmount">$0.20</div>
 </div>
-
 <div class="card">
 <div class="label">Estimated lot size</div>
 <div class="metric" id="lotSize">0.0020</div>
@@ -610,7 +359,6 @@ Trading involves risk. Test on demo first.
 
 </main>
 
-<!-- MOBILE NAVIGATION -->
 <nav class="bottom" id="bottomNav">
 <button class="active" data-page="dashboard">▦<br>Home</button>
 <button data-page="chartai">◉<br>Chart AI</button>
@@ -648,9 +396,7 @@ function showPage(id) {
     settings: "Settings"
   };
 
-  document.getElementById("crumb").textContent =
-    names[id] || id;
-
+  document.getElementById("crumb").textContent = names[id] || id;
   window.scrollTo(0, 0);
 }
 
@@ -687,18 +433,12 @@ async function loadEURUSD() {
   const settings = document.getElementById("settingsFeed");
 
   try {
-    const response = await fetch(
-      API + "/api/market/forex/EURUSD"
-    );
-
+    const response = await fetch(API + "/api/market/forex/EURUSD");
     if (!response.ok) throw new Error("Feed unavailable");
 
     const result = await response.json();
     const price = Number(result.data?.p);
-
-    if (!Number.isFinite(price)) {
-      throw new Error("Invalid price");
-    }
+    if (!Number.isFinite(price)) throw new Error("Invalid price");
 
     const formatted = price.toFixed(5);
 
@@ -710,7 +450,6 @@ async function loadEURUSD() {
     settings.textContent = "Connected";
     settings.className = "green";
     feedState.eurusd = true;
-
   } catch (error) {
     document.getElementById("eurusdPrice").textContent = "Unavailable";
     document.getElementById("watchEURUSD").textContent = "Unavailable";
@@ -720,7 +459,6 @@ async function loadEURUSD() {
     settings.textContent = "Unavailable";
     settings.className = "red";
     feedState.eurusd = false;
-
     console.error("EURUSD feed error:", error);
   }
 
@@ -731,18 +469,12 @@ async function loadGold() {
   const settings = document.getElementById("settingsGold");
 
   try {
-    const response = await fetch(
-      API + "/api/market/commodities/XAUUSD"
-    );
-
+    const response = await fetch(API + "/api/market/commodities/XAUUSD");
     if (!response.ok) throw new Error("Gold feed unavailable");
 
     const result = await response.json();
     const price = Number(result.data?.p);
-
-    if (!Number.isFinite(price)) {
-      throw new Error("Invalid Gold price");
-    }
+    if (!Number.isFinite(price)) throw new Error("Invalid Gold price");
 
     const formatted = price.toFixed(2);
 
@@ -754,7 +486,6 @@ async function loadGold() {
     settings.textContent = "Connected";
     settings.className = "green";
     feedState.gold = true;
-
   } catch (error) {
     document.getElementById("goldPrice").textContent = "Unavailable";
     document.getElementById("watchGold").textContent = "Unavailable";
@@ -764,7 +495,6 @@ async function loadGold() {
     settings.textContent = "Unavailable";
     settings.className = "red";
     feedState.gold = false;
-
     console.error("Gold feed error:", error);
   }
 
@@ -775,18 +505,12 @@ async function loadBTC() {
   const settings = document.getElementById("settingsBTC");
 
   try {
-    const response = await fetch(
-      API + "/api/market/crypto/BTCUSD"
-    );
-
+    const response = await fetch(API + "/api/market/crypto/BTCUSD");
     if (!response.ok) throw new Error("Bitcoin feed unavailable");
 
     const result = await response.json();
     const price = Number(result.data?.p);
-
-    if (!Number.isFinite(price)) {
-      throw new Error("Invalid Bitcoin price");
-    }
+    if (!Number.isFinite(price)) throw new Error("Invalid Bitcoin price");
 
     const formatted = price.toLocaleString("en-US", {
       minimumFractionDigits: 2,
@@ -801,7 +525,6 @@ async function loadBTC() {
     settings.textContent = "Connected";
     settings.className = "green";
     feedState.btc = true;
-
   } catch (error) {
     document.getElementById("btcPrice").textContent = "Unavailable";
     document.getElementById("watchBTC").textContent = "Unavailable";
@@ -811,7 +534,6 @@ async function loadBTC() {
     settings.textContent = "Unavailable";
     settings.className = "red";
     feedState.btc = false;
-
     console.error("BTCUSD feed error:", error);
   }
 
@@ -864,15 +586,13 @@ chartFile.addEventListener("change", () => {
   ];
 
   if (!allowedTypes.includes(file.type)) {
-    aiStatus.textContent =
-      "Please choose a JPEG, PNG or WebP image.";
+    aiStatus.textContent = "Please choose a JPEG, PNG or WebP image.";
     chartFile.value = "";
     return;
   }
 
   if (file.size > 5 * 1024 * 1024) {
-    aiStatus.textContent =
-      "Image is too large. Maximum size is 5 MB.";
+    aiStatus.textContent = "Image is too large. Maximum size is 5 MB.";
     chartFile.value = "";
     return;
   }
@@ -885,14 +605,11 @@ chartFile.addEventListener("change", () => {
 
   analyzeBtn.disabled = false;
   aiStatus.style.color = "var(--muted)";
-  aiStatus.textContent =
-    "Image ready. Tap Analyze chart to begin.";
+  aiStatus.textContent = "Image ready. Tap Analyze chart to begin.";
 });
 
-/*
-  Formats the AI's existing text response into separate cards.
-  It does not invent levels, entries, or trading signals.
-*/
+/* Display the AI's existing response in separate cards.
+   The renderer does not invent entries, levels or signals. */
 function renderAIAnalysis(analysis, disclaimer) {
   const source = String(analysis || "").trim();
 
@@ -967,32 +684,10 @@ function renderAIAnalysis(analysis, disclaimer) {
     cardTitle.textContent = section.title;
     card.appendChild(cardTitle);
 
-    const bodyText = section.body.join("\n").trim();
-
-    if (title.includes("possible setup") || title.includes("trade setup")) {
-      const pill = document.createElement("span");
-      const upper = bodyText.toUpperCase();
-
-      if (upper.includes("NO CLEAR SETUP")) {
-        pill.className = "ai-status-pill no-setup";
-        pill.textContent = "NO CLEAR SETUP";
-      } else if (/\bBUY\b/.test(upper)) {
-        pill.className = "ai-status-pill buy";
-        pill.textContent = "BUY MENTIONED · VERIFY";
-      } else if (/\bSELL\b/.test(upper)) {
-        pill.className = "ai-status-pill sell";
-        pill.textContent = "SELL MENTIONED · VERIFY";
-      } else {
-        pill.className = "ai-status-pill";
-        pill.textContent = "REVIEW SETUP";
-      }
-
-      card.appendChild(pill);
-    }
-
     const body = document.createElement("p");
     body.className = "ai-section-body";
-    body.textContent = bodyText || "No details were provided.";
+    body.textContent =
+      section.body.join("\n").trim() || "No details were provided.";
 
     card.appendChild(body);
     grid.appendChild(card);
@@ -1019,8 +714,7 @@ analyzeBtn.addEventListener("click", async () => {
   analyzeBtn.disabled = true;
   analyzeBtn.textContent = "Analyzing...";
   aiStatus.style.color = "var(--muted)";
-  aiStatus.textContent =
-    "Sending chart to PipNex Flow AI...";
+  aiStatus.textContent = "Sending chart to PipNex Flow AI...";
 
   aiResult.style.display = "none";
   aiResult.replaceChildren();
@@ -1029,13 +723,10 @@ analyzeBtn.addEventListener("click", async () => {
   formData.append("chart", selectedChart);
 
   try {
-    const response = await fetch(
-      API + "/api/chart/analyze",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
+    const response = await fetch(API + "/api/chart/analyze", {
+      method: "POST",
+      body: formData
+    });
 
     let result;
 
@@ -1069,9 +760,7 @@ analyzeBtn.addEventListener("click", async () => {
   } catch (error) {
     aiStatus.style.color = "var(--red)";
     aiStatus.textContent = error.message;
-
     console.error("Chart AI error:", error);
-
   } finally {
     analyzeBtn.disabled = !selectedChart;
     analyzeBtn.textContent = "Analyze chart";
@@ -1104,8 +793,7 @@ function getStrategies() {
 function renderStrategies() {
   const list = getStrategies();
 
-  document.getElementById("strategyCount").textContent =
-    list.length;
+  document.getElementById("strategyCount").textContent = list.length;
 
   const box = document.getElementById("savedStrategies");
 
@@ -1117,27 +805,17 @@ function renderStrategies() {
 
   box.className = "";
 
-  box.innerHTML = list.map((strategy, index) => {
-    const symbol = strategy.symbol || "General";
-    const timeframe = strategy.timeframe || "Not specified";
-
-    return `
-      <div class="card section">
-        <strong>${escapeHTML(strategy.name)}</strong>
-        <div class="strategy-meta">
-          <span>${escapeHTML(symbol)}</span>
-          <span>${escapeHTML(timeframe)}</span>
-        </div>
-        <p class="muted">${escapeHTML(strategy.description)}</p>
-        <button class="btn" data-delete="${index}">Delete</button>
-      </div>
-    `;
-  }).join("");
+  box.innerHTML = list.map((strategy, index) => `
+    <div class="card section">
+      <strong>${escapeHTML(strategy.name || "Untitled strategy")}</strong>
+      <p class="muted">${escapeHTML(strategy.description || "")}</p>
+      <button class="btn" data-delete="${index}">Delete</button>
+    </div>
+  `).join("");
 
   box.querySelectorAll("[data-delete]").forEach(button => {
     button.addEventListener("click", () => {
       const items = getStrategies();
-
       items.splice(Number(button.dataset.delete), 1);
 
       localStorage.setItem(
@@ -1152,14 +830,8 @@ function renderStrategies() {
 
 document.getElementById("saveStrategy")
 .addEventListener("click", () => {
-  const name = document.getElementById("strategyName")
-    .value.trim();
-
-  const description = document.getElementById("strategyDescription")
-    .value.trim();
-
-  const symbol = document.getElementById("strategySymbol").value;
-  const timeframe = document.getElementById("strategyTimeframe").value;
+  const name = document.getElementById("strategyName").value.trim();
+  const description = document.getElementById("strategyDescription").value.trim();
 
   if (!name || !description) {
     alert("Enter a strategy name and rules first.");
@@ -1170,9 +842,7 @@ document.getElementById("saveStrategy")
 
   list.unshift({
     name,
-    description,
-    symbol,
-    timeframe
+    description
   });
 
   localStorage.setItem(
@@ -1184,7 +854,6 @@ document.getElementById("saveStrategy")
   document.getElementById("strategyDescription").value = "";
 
   renderStrategies();
-
   alert("Strategy saved on this device.");
 });
 
@@ -1231,8 +900,7 @@ function calculateRisk() {
   "stopDistance",
   "pipValue"
 ].forEach(id => {
-  document.getElementById(id)
-    .addEventListener("input", calculateRisk);
+  document.getElementById(id).addEventListener("input", calculateRisk);
 });
 
 calculateRisk();
@@ -1243,10 +911,7 @@ async function checkAIService() {
 
   try {
     const response = await fetch(API + "/api/health");
-
-    if (!response.ok) {
-      throw new Error("Health check failed");
-    }
+    if (!response.ok) throw new Error("Health check failed");
 
     const result = await response.json();
 
@@ -1257,7 +922,6 @@ async function checkAIService() {
       settings.textContent = "Not configured";
       settings.className = "red";
     }
-
   } catch (error) {
     settings.textContent = "Unavailable";
     settings.className = "red";
