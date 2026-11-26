@@ -9,7 +9,7 @@ const { GoogleGenAI } = require("@google/genai");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const AI_MODEL = "gemini-2.5-flash-lite";
+const AI_MODEL = "gemini-3.5-flash-lite";
 
 // Render proxy configuration
 app.set("trust proxy", 1);
